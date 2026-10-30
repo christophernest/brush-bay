@@ -9,7 +9,7 @@
 
   // ---------- Saved progress (only on this device) ----------
   const STORE_KEY = "stroke-sea-v1";
-  const blank = () => ({ chars: {}, settings: { pinyin: false, strict: false, unlock: false } });
+  const blank = () => ({ chars: {}, fish: {}, settings: { pinyin: false, strict: false, unlock: false } });
   let progress = blank();
   try {
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
@@ -32,6 +32,11 @@
 
   // WORLDS are the categories (Numbers, Nature, ...). Each is a page with its own scene and fish tank.
   const masteredIn = (w) => w.chars.filter((c) => stageOf(c) >= MASTERED).length;
+  // Fish in a category's tank: one for every 3-star turn on its characters.
+  // (Progress saved before this rule starts with one fish per mastered character.)
+  WORLDS.forEach((w) => { if (progress.fish[w.id] === undefined) progress.fish[w.id] = masteredIn(w); });
+  const fishIn = (w) => progress.fish[w.id] || 0;
+  const MAX_SWIMMERS = 40;  // more than this would crowd the screen
   const worldDone = (w) => masteredIn(w) === w.chars.length;
   const worldStars = (w) => Math.floor((3 * masteredIn(w)) / w.chars.length);  // one star per third mastered
   // A category opens once the one before it has its first star.
@@ -41,10 +46,14 @@
 
   // ---------- Sound ----------
   let audio;
+  function audioCtx() {
+    audio ||= new (window.AudioContext || window.webkitAudioContext)();
+    if (audio.state === "suspended") audio.resume();
+    return audio;
+  }
   function tone(freq, dur = 0.2, type = "sine", vol = 0.14, when = 0) {
     try {
-      audio ||= new (window.AudioContext || window.webkitAudioContext)();
-      if (audio.state === "suspended") audio.resume();
+      audioCtx();
       const t = audio.currentTime + when;
       const o = audio.createOscillator();
       const g = audio.createGain();
@@ -79,7 +88,53 @@
     pickVoice();
     speechSynthesis.addEventListener?.("voiceschanged", pickVoice);
   }
+  // ---------- Voice clips (natural neural voice, made by tools/make_audio.py) ----------
+  // Each character has "<code>-say.mp3" (the voice line) and "<code>.mp3" (the character alone).
+  // Clips play through Web Audio so they also work after a short delay, not only straight after a tap.
+  let clips = new Set();
+  let clipVoice = "";
+  const buffers = {};
+  fetch("audio/clips.json").then((r) => (r.ok ? r.json() : null)).then((d) => {
+    if (!d) return;
+    clips = new Set(d.clips);
+    clipVoice = d.voice;
+    // Fetch every clip once in the background so they're stored for offline use.
+    if (navigator.onLine) d.clips.forEach((name, i) => setTimeout(() => fetch("audio/" + name).catch(() => {}), 50 * i));
+  }).catch(() => {});
+
+  let voiceToken = 0;
+  async function playClip(name) {
+    const my = ++voiceToken;
+    const ctx = audioCtx();
+    if (!buffers[name]) {
+      const data = await (await fetch("audio/" + name)).arrayBuffer();
+      buffers[name] = await ctx.decodeAudioData(data);
+    }
+    if (my !== voiceToken) return;  // a newer line was asked for while this one loaded
+    if (playClip.current) try { playClip.current.stop(); } catch (e) {}
+    const src = ctx.createBufferSource();
+    src.buffer = buffers[name];
+    src.connect(ctx.destination);
+    src.start();
+    playClip.current = src;
+  }
+
+  // Say a character: kind "say" is its voice line (大，大象的大); "char" is the character alone.
+  function sayWord(word, kind = "say") {
+    const name = `${word.char.codePointAt(0).toString(16)}${kind === "say" ? "-say" : ""}.mp3`;
+    const text = kind === "say" ? word.say : word.char;
+    if (clips.has(name)) {
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      playClip(name).catch(() => speak(text));
+    } else {
+      speak(text);
+    }
+  }
+
+  // The device's own voice: the fallback when there's no clip.
   function speak(text) {
+    voiceToken++;
+    if (playClip.current) try { playClip.current.stop(); } catch (e) {}
     if (!("speechSynthesis" in window)) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
@@ -169,7 +224,7 @@
   function fillAquarium() {
     emptyAquarium();
     if (!here) return;
-    for (let i = 0; i < masteredIn(here); i++) {
+    for (let i = 0; i < Math.min(fishIn(here), MAX_SWIMMERS); i++) {
       const el = document.createElement("div");
       const size = 56 + Math.round(Math.random() * 28);
       el.className = "swimmer";
@@ -254,7 +309,7 @@
   // Play: the next characters in order plus one review. Tapping a character practises just that one.
   function startWorld(world, onlyChar) {
     const items = onlyChar ? [{ char: onlyChar, review: stageOf(onlyChar) >= MASTERED }] : buildQueue(world);
-    session = { world, items, i: 0, stars: [], mastered: [], wasDone: worldDone(world) };
+    session = { world, items, i: 0, stars: [], mastered: [], newFish: 0, wasDone: worldDone(world) };
     show("practice");
     showItem();
   }
@@ -323,7 +378,7 @@
     $("card-meaning").textContent = word.meaning;
     $("pinyin").textContent = progress.settings.pinyin ? word.pinyin : "";
     $("pinyin").hidden = !progress.settings.pinyin;
-    speak(word.say);
+    sayWord(word);
     lesson();
   }
 
@@ -420,7 +475,15 @@
     fanfare();
     bubbles(10);
     $("stars").innerHTML = [1, 2, 3].map((n) => `<span class="${n <= stars ? "" : "dim"}">${STAR_SVG}</span>`).join("");
-    setTimeout(() => speak(word.char), 500);
+    // Three stars: a new creature for this character's category tank.
+    if (stars === 3) {
+      const home = WORLDS.find((w) => w.id === word.world);
+      progress.fish[home.id] = fishIn(home) + 1;
+      save();
+      if (home === session.world) session.newFish++;
+      $("stars").insertAdjacentHTML("beforeend", `<span class="fish-won">${CREATURE_SVG(home.creature)}</span>`);
+    }
+    setTimeout(() => sayWord(word, "char"), 500);
     buttons({ next: true });
   }
 
@@ -435,10 +498,10 @@
     $("done-guide").innerHTML = stingray();
     restartAnim($("done-guide"), "happy");
     $("done-stars").innerHTML = STAR_SVG.repeat(s.stars.reduce((a, b) => a + b, 0));
-    // Each character mastered this time adds a creature to this category's tank.
+    // New stickers for characters mastered, and the creatures won with 3-star turns.
     let html = s.mastered.length ? `<span class="new-stickers">${ICON("book")} ${s.mastered.join(" ")}</span>` : "";
-    if (s.mastered.length) {
-      html += `<span class="creatures-new">${s.mastered.map(() => `<span class="creature">${CREATURE_SVG(s.world.creature)}</span>`).join("")}</span>`;
+    if (s.newFish) {
+      html += `<span class="creatures-new">${Array(s.newFish).fill(`<span class="creature">${CREATURE_SVG(s.world.creature)}</span>`).join("")}</span>`;
     }
     $("done-new").innerHTML = html;
     show("done");
@@ -455,7 +518,7 @@
       b.className = "sticker" + (got ? "" : " locked");
       b.innerHTML = got ? w.char : "<i class='empty-bubble'></i>";
       b.setAttribute("aria-label", got ? w.char : "Not collected yet");
-      if (got) b.addEventListener("click", () => { speak(w.say); restartAnim(b, "bounce"); });
+      if (got) b.addEventListener("click", () => { sayWord(w); restartAnim(b, "bounce"); });
       $("stickers").appendChild(b);
     });
     show("book");
@@ -472,7 +535,11 @@
     $("set-strict").checked = progress.settings.strict;
     $("set-unlock").checked = progress.settings.unlock;
     pickVoice();
-    $("voice-status").textContent = !("speechSynthesis" in window)
+    const haveClips = WORDS.filter((w) => clips.has(`${w.char.codePointAt(0).toString(16)}-say.mp3`)).length;
+    $("voice-status").textContent = haveClips
+      ? `Natural voice clips (${clipVoice}, a computer voice from Microsoft Azure) for ${haveClips} of ${WORDS.length} characters.` +
+        (haveClips < WORDS.length ? " The rest use this device's own voice." : "")
+      : !("speechSynthesis" in window)
       ? "This browser has no speech support, so the speaker button stays silent."
       : zhVoice
         ? `Using the voice "${zhVoice.name}" (${zhVoice.lang}).`
@@ -496,7 +563,7 @@
   $("go-home").addEventListener("click", () => openWorld(here));
   $("world-home").addEventListener("click", renderHome);
   $("world-play").addEventListener("click", () => startWorld(here));
-  $("say").addEventListener("click", () => session && speak(current().word.say));
+  $("say").addEventListener("click", () => session && sayWord(current().word));
   // "Again": in guided steps, show the current stroke again; otherwise replay the whole character.
   $("replay").addEventListener("click", () => (guide.w ? showNextStroke() : lesson()));
   $("next").addEventListener("click", nextItem);
@@ -510,7 +577,7 @@
   setting("set-pinyin", "pinyin");
   setting("set-strict", "strict");
   setting("set-unlock", "unlock");
-  $("voice-test").addEventListener("click", () => speak("你好！大，大象的大。"));
+  $("voice-test").addEventListener("click", () => sayWord(WORD["大"]));
   $("reset").addEventListener("click", () => {
     if (!confirm("Reset all progress? Every character goes back to the start.")) return;
     if (!confirm("Are you sure? This can't be undone.")) return;

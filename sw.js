@@ -1,5 +1,5 @@
 // Keeps the app working offline. Change VERSION whenever any file changes, so devices pick up the new files.
-const VERSION = "stroke-sea-9";
+const VERSION = "stroke-sea-11";
 const FILES = [
   "./", "index.html", "style.css", "app.js", "words.js", "characters.js", "pictures.js",
   "vendor/hanzi-writer.min.js", "manifest.webmanifest",
@@ -18,7 +18,11 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+// Serve from the offline copy; anything not stored yet (like the voice clips) is fetched once and kept.
 self.addEventListener("fetch", (e) => {
-  if (e.request.method !== "GET") return;
-  e.respondWith(caches.match(e.request).then((hit) => hit || fetch(e.request)));
+  if (e.request.method !== "GET" || new URL(e.request.url).origin !== location.origin) return;
+  e.respondWith(caches.match(e.request).then((hit) => hit || fetch(e.request).then((res) => {
+    if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(e.request, copy)); }
+    return res;
+  })));
 });
