@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Stroke Sea</title>
+  <meta name="description" content="Chinese character writing practice for young children.">
+  <meta name="theme-color" content="#0b4f7a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Stroke Sea">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="sea" aria-hidden="true"></div>
+  <div id="plants" aria-hidden="true"></div>
+  <div id="aquarium" aria-hidden="true"></div>
+
+  <!-- Home: the ocean and the worlds -->
+  <main id="home" class="screen">
+    <header class="home-head">
+      <div class="guide" id="home-guide"></div>
+      <h1>Stroke Sea</h1>
+    </header>
+    <div id="cats" class="cats"></div>
+    <nav class="home-nav">
+      <button id="open-book" class="round big" aria-label="Sticker book"><span data-icon="book"></span></button>
+      <button id="open-parent" class="round small hold" aria-label="Parent corner (hold for 3 seconds)"><span data-icon="gear"></span><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/></svg></button>
+    </nav>
+  </main>
+
+  <!-- One category: its characters, its scene and its fish tank -->
+  <main id="world" class="screen" hidden>
+    <header class="bar">
+      <button id="world-home" class="round" aria-label="Back to all the seas"><span data-icon="home"></span></button>
+      <h2 class="world-title"><span id="world-zh"></span><small id="world-name"></small></h2>
+      <span class="spacer"></span>
+    </header>
+    <div id="words" class="words"></div>
+    <footer class="actions">
+      <button id="world-play" class="pill go" aria-label="Play"><span data-icon="next"></span> <span>Play</span></button>
+    </footer>
+  </main>
+
+  <!-- Practice: one character at a time -->
+  <main id="practice" class="screen" hidden>
+    <header class="bar">
+      <button id="go-home" class="round" aria-label="Back to this sea"><span data-icon="home"></span></button>
+      <button id="say" class="round big" aria-label="Say the character"><span data-icon="speaker"></span></button>
+    </header>
+    <section class="stage">
+      <div class="card">
+        <div id="picture" class="picture"></div>
+        <div id="card-char" class="card-char"></div>
+        <div id="pinyin" class="pinyin"></div>
+        <div id="card-meaning" class="card-meaning"></div>
+      </div>
+      <div id="pads" class="pads"></div>
+    </section>
+    <footer class="actions">
+      <button id="replay" class="pill" hidden><span data-icon="eye"></span> <span>Again</span></button>
+      <button id="next" class="pill go" hidden aria-label="Next"><span data-icon="next"></span></button>
+    </footer>
+    <div id="stars" class="stars" aria-live="polite"></div>
+  </main>
+
+  <!-- End of a session -->
+  <main id="done" class="screen" hidden>
+    <div class="guide big" id="done-guide"></div>
+    <div id="done-stars" class="done-stars"></div>
+    <div id="done-new" class="done-new"></div>
+    <button id="done-home" class="pill go" aria-label="Back to this sea"><span data-icon="home"></span></button>
+  </main>
+
+  <!-- Sticker book -->
+  <main id="book" class="screen" hidden>
+    <header class="bar">
+      <button id="book-home" class="round" aria-label="Back to the sea"><span data-icon="home"></span></button>
+      <h2 class="book-title"><span data-icon="book"></span></h2>
+      <span class="spacer"></span>
+    </header>
+    <div id="stickers" class="stickers"></div>
+  </main>
+
+  <!-- Parent corner -->
+  <main id="parent" class="screen parent" hidden>
+    <header class="bar">
+      <button id="parent-home" class="round" aria-label="Close the parent corner"><span data-icon="close"></span></button>
+      <h2>Parent corner</h2>
+      <span class="spacer"></span>
+    </header>
+    <div class="parent-body">
+      <section>
+        <h3>Progress</h3>
+        <p id="progress-summary"></p>
+      </section>
+      <section>
+        <h3>Settings</h3>
+        <label class="row"><input type="checkbox" id="set-pinyin"> Show pinyin on the picture card</label>
+        <label class="row"><input type="checkbox" id="set-strict"> Stricter stroke checking</label>
+        <label class="row"><input type="checkbox" id="set-unlock"> Unlock every world</label>
+      </section>
+      <section>
+        <h3>Voice</h3>
+        <p id="voice-status"></p>
+        <button id="voice-test" class="pill small"><span data-icon="speaker"></span> Test the voice</button>
+      </section>
+      <section>
+        <h3>Start again</h3>
+        <button id="reset" class="pill small danger">Reset all progress</button>
+      </section>
+      <section>
+        <h3>Credits</h3>
+        <p>Stroke order and checking: <a href="https://hanziwriter.org" target="_blank" rel="noopener">Hanzi Writer</a> 3.7.3 by David Chanin (MIT licence). Stroke data: hanzi-writer-data 2.0.1, from the <a href="https://github.com/skishore/makemeahanzi" target="_blank" rel="noopener">Make Me a Hanzi</a> project, based on fonts by Arphic Technology (Arphic Public License). Licence texts are in the <code>licenses</code> folder. Pictures were drawn for this app with Claude. The voice is this device's built-in speech.</p>
+        <p>Made with Claude Code. An unofficial fan project, not affiliated with Anthropic. Progress is saved only on this device.</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="vendor/hanzi-writer.min.js"></script>
+  <script src="words.js"></script>
+  <script src="characters.js"></script>
+  <script src="pictures.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
