@@ -183,7 +183,9 @@ button {
 .cat-creature svg { width: 80%; height: 80%; }
 .cat-zh { font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: clamp(22px, 5vw, 30px); font-weight: 600; text-shadow: 0 2px 0 rgba(0,0,0,.2); }
 .cat-name { font-size: clamp(13px, 3.2vw, 16px); font-weight: 700; text-shadow: 0 1px 0 rgba(0,0,0,.25); }
-.cat-stars, .word-stars { display: flex; justify-content: center; gap: 2px; }
+.cat-stars, .word-stars { display: flex; justify-content: center; align-items: center; gap: 2px; }
+.cat-stars { font-weight: 700; font-size: clamp(13px, 2.4vw, 16px); color: rgba(255,255,255,.85); }
+.cat-stars b { font-size: 1.25em; color: #fff; margin: 0 2px 0 4px; }
 .cat-stars i, .word-stars i { width: clamp(18px, 4.5vw, 26px); height: clamp(18px, 4.5vw, 26px); }
 .cat-stars i svg, .word-stars i svg { width: 100%; height: 100%; display: block; }
 .cat-stars i:not(.on) svg, .word-stars i:not(.on) svg { filter: grayscale(1) opacity(.35); }
@@ -223,6 +225,7 @@ button {
 .word.got { box-shadow: inset -6px -8px 0 rgba(11,79,122,.10), 0 0 0 4px var(--gold), 0 6px 0 rgba(0,0,0,.15); }
 
 .home-nav { display: flex; justify-content: space-between; align-items: center; }
+.home-nav #music { margin-left: auto; margin-right: 14px; }
 .hold { position: relative; }
 .hold > svg { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); transform: rotate(-90deg); }
 .hold > svg circle { fill: none; stroke: var(--pink); stroke-width: 3; stroke-dasharray: 101; stroke-dashoffset: 101; }
@@ -312,6 +315,7 @@ button {
 #done { align-items: center; justify-content: center; text-align: center; color: #fff; }
 .done-stars { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 520px; }
 .done-stars svg { width: 52px; height: 52px; }
+.done-actions { display: flex; align-items: center; gap: 20px; }
 .done-new { font-size: 26px; font-weight: 700; min-height: 1em; }
 .creatures-new { display: flex; justify-content: center; gap: 8px; }
 .done-new .creature { display: block; width: 120px; height: 120px; margin: 8px 0 0; animation: pop .7s cubic-bezier(.2,1.6,.4,1) .4s backwards; }

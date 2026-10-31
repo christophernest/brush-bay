@@ -9,7 +9,7 @@
 
   // ---------- Saved progress (only on this device) ----------
   const STORE_KEY = "stroke-sea-v1";
-  const blank = () => ({ chars: {}, fish: {}, settings: { pinyin: false, strict: false, unlock: false } });
+  const blank = () => ({ chars: {}, settings: { pinyin: false, strict: false, unlock: false, music: true } });
   let progress = blank();
   try {
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
@@ -32,16 +32,17 @@
 
   // WORLDS are the categories (Numbers, Nature, ...). Each is a page with its own scene and fish tank.
   const masteredIn = (w) => w.chars.filter((c) => stageOf(c) >= MASTERED).length;
-  // Fish in a category's tank: one for every 3-star turn on its characters.
-  // (Progress saved before this rule starts with one fish per mastered character.)
-  WORLDS.forEach((w) => { if (progress.fish[w.id] === undefined) progress.fish[w.id] = masteredIn(w); });
-  const fishIn = (w) => progress.fish[w.id] || 0;
+  // Stars are earned once per character: its best turn counts (2 stars, then 3 later, adds just 1).
+  const bestOf = (c) => (progress.chars[c] ? progress.chars[c].best : 0);
+  const worldStars = (w) => w.chars.reduce((n, c) => n + bestOf(c), 0);
+  // Fish in a category's tank: one for each of its characters that has had a 3-star turn, won once.
+  const fishIn = (w) => w.chars.filter((c) => bestOf(c) === 3).length;
   const MAX_SWIMMERS = 40;  // more than this would crowd the screen
   const worldDone = (w) => masteredIn(w) === w.chars.length;
-  const worldStars = (w) => Math.floor((3 * masteredIn(w)) / w.chars.length);  // one star per third mastered
-  // A category opens once the one before it has its first star.
+  // A category opens once the one before it has two thirds (67%) of its possible stars, e.g. 20 of 30.
+  const unlockAt = (w) => 2 * w.chars.length;  // two of the three stars per character, on average
   const worldUnlocked = (i) =>
-    i === 0 || progress.settings.unlock || (worldUnlocked(i - 1) && worldStars(WORLDS[i - 1]) >= 1);
+    i === 0 || progress.settings.unlock || (worldUnlocked(i - 1) && worldStars(WORLDS[i - 1]) >= unlockAt(WORLDS[i - 1]));
   const starRow = (n) => [1, 2, 3].map((k) => `<i class="${k <= n ? "on" : ""}">${STAR_SVG}</i>`).join("");
 
   // ---------- Sound ----------
@@ -71,6 +72,17 @@
   const chime = (i) => tone(PENTA[Math.min(i, PENTA.length - 1)], 0.3);
   const thud = () => tone(196, 0.22, "triangle", 0.12);
   const fanfare = () => [0, 2, 4, 7].forEach((n, i) => tone(PENTA[n], 0.35, "sine", 0.14, i * 0.12));
+
+  // ---------- Background music (music.js): on unless it's switched off; it can only start after a tap ----------
+  function musicOn() {
+    if (progress.settings.music && !document.hidden) SeaMusic.start(audioCtx());
+  }
+  function showMusicButton() {
+    $("music").innerHTML = ICON(progress.settings.music ? "music" : "musicOff");
+    $("music").setAttribute("aria-pressed", progress.settings.music);
+  }
+  document.addEventListener("pointerdown", musicOn, { capture: true });
+  document.addEventListener("visibilitychange", () => (document.hidden ? SeaMusic.stop() : musicOn()));
 
   // ---------- Voice (the device's own Chinese voice) ----------
   let zhVoice = null;
@@ -115,6 +127,7 @@
     const src = ctx.createBufferSource();
     src.buffer = buffers[name];
     src.connect(ctx.destination);
+    SeaMusic.duck(src.buffer.duration + 0.3);
     src.start();
     playClip.current = src;
   }
@@ -141,6 +154,7 @@
     u.lang = "zh-CN";
     if (zhVoice) u.voice = zhVoice;
     u.rate = 0.8;
+    SeaMusic.duck(3);
     speechSynthesis.speak(u);
   }
 
@@ -188,11 +202,13 @@
     if (id !== "practice") clearPads();
     // A category's creatures swim on its page and its end screen, never while she's writing.
     if (id === "world" || id === "done") fillAquarium(); else emptyAquarium();
+    SeaMusic.level(id === "practice" ? 0.6 : 1);  // softer while she's writing
   }
 
   // Each category has its own water colours and plants; the home page has the open sea.
   function setScene(key) {
     const sc = SCENE(key);
+    SeaMusic.mood(key);
     const sea = $("sea").style;
     sea.setProperty("--top", sc.water[0]);
     sea.setProperty("--mid", sc.water[1]);
@@ -201,7 +217,7 @@
     $("plants").innerHTML = sc.plants;
   }
 
-  // ---------- The fish tank: one creature for each character mastered in this category ----------
+  // ---------- The fish tank: one creature for each character in this category with a 3-star turn ----------
   let swimmers = [];
   const FACES_RIGHT = new Set(["dolphin", "shrimp", "seal", "seahorse"]);  // the rest are drawn facing left
   function emptyAquarium() {
@@ -253,10 +269,10 @@
       b.style.setProperty("--top", sc.water[0]);
       b.style.setProperty("--mid", sc.water[1]);
       b.style.setProperty("--bot", sc.water[2]);
-      b.setAttribute("aria-label", `${w.name}, ${stars} of 3 stars${unlocked ? "" : " (locked)"}`);
+      b.setAttribute("aria-label", `${w.name}, ${stars} of ${3 * w.chars.length} stars${unlocked ? "" : " (locked)"}`);
       b.innerHTML = `<span class="cat-creature">${CREATURE_SVG(w.creature)}</span>
         <span class="cat-zh">${w.zh}</span><span class="cat-name">${w.name}</span>
-        <span class="cat-stars">${starRow(stars)}</span>
+        <span class="cat-stars"><i class="on">${STAR_SVG}</i><b>${stars}</b> / ${3 * w.chars.length}</span>
         ${unlocked ? "" : `<span class="lock">${ICON("lock")}</span>`}`;
       b.addEventListener("click", () => {
         if (!unlocked) { thud(); restartAnim(b, "wobble"); return; }
@@ -314,7 +330,7 @@
   // Play: the next characters in order plus one review. Tapping a character practises just that one.
   function startWorld(world, onlyChar) {
     const items = onlyChar ? [{ char: onlyChar, review: stageOf(onlyChar) >= MASTERED }] : buildQueue(world);
-    session = { world, items, i: 0, stars: [], mastered: [], newFish: 0, wasDone: worldDone(world) };
+    session = { world, onlyChar, items, i: 0, stars: [], mastered: [], newFish: 0, gained: 0, wasDone: worldDone(world), turnDone: false };
     show("practice");
     showItem();
   }
@@ -464,7 +480,9 @@
     const stars = mistakes === 0 ? 3 : mistakes <= 3 ? 2 : 1;
     const cs = charState(item.char);
     cs.last = Date.now();
+    const before = cs.best;
     cs.best = Math.max(cs.best, stars);
+    session.gained += cs.best - before;  // only stars above her best so far are new
     if (!item.review) {
       cs.tries++;
       // Move up a step after a good try, or after two tries at the same step.
@@ -480,19 +498,22 @@
     fanfare();
     bubbles(10);
     $("stars").innerHTML = [1, 2, 3].map((n) => `<span class="${n <= stars ? "" : "dim"}">${STAR_SVG}</span>`).join("");
-    // Three stars: a new creature for this character's category tank.
-    if (stars === 3) {
+    // The first 3-star turn on a character: a new creature for its category tank (one per character, ever).
+    if (stars === 3 && before < 3) {
       const home = WORLDS.find((w) => w.id === word.world);
-      progress.fish[home.id] = fishIn(home) + 1;
-      save();
       if (home === session.world) session.newFish++;
       $("stars").insertAdjacentHTML("beforeend", `<span class="fish-won">${CREATURE_SVG(home.creature)}</span>`);
     }
     setTimeout(() => sayWord(word, "char"), 500);
-    buttons({ next: true });
+    // Move on by itself after a moment to enjoy the stars (no Next button to find).
+    session.turnDone = true;
+    buttons({});
+    const my = token;
+    setTimeout(() => { if (my === token) nextItem(); }, 2800);
   }
 
   function nextItem() {
+    session.turnDone = false;
     session.i++;
     if (session.i < session.items.length) { showItem(); return; }
     showDone();
@@ -502,7 +523,7 @@
     const s = session;
     $("done-guide").innerHTML = stingray();
     restartAnim($("done-guide"), "happy");
-    $("done-stars").innerHTML = STAR_SVG.repeat(s.stars.reduce((a, b) => a + b, 0));
+    $("done-stars").innerHTML = STAR_SVG.repeat(s.gained);  // new stars only
     // New stickers for characters mastered, and the creatures won with 3-star turns.
     let html = s.mastered.length ? `<span class="new-stickers">${ICON("book")} ${s.mastered.join(" ")}</span>` : "";
     if (s.newFish) {
@@ -534,8 +555,10 @@
     const mastered = WORDS.filter((w) => stageOf(w.char) >= MASTERED).length;
     const started = WORDS.filter((w) => stageOf(w.char) > 0 && stageOf(w.char) < MASTERED).length;
     const worlds = WORLDS.filter(worldDone).length;
+    const stars = WORLDS.reduce((n, w) => n + worldStars(w), 0);
     $("progress-summary").textContent =
-      `${mastered} of ${WORDS.length} characters mastered, ${started} in progress. ${worlds} of ${WORLDS.length} categories finished.`;
+      `${stars} of ${3 * WORDS.length} stars. ${mastered} of ${WORDS.length} characters mastered, ${started} in progress. ${worlds} of ${WORLDS.length} categories finished. ` +
+      "A category opens when the one before it has two thirds of its stars (20 of 30, for example).";
     $("set-pinyin").checked = progress.settings.pinyin;
     $("set-strict").checked = progress.settings.strict;
     $("set-unlock").checked = progress.settings.unlock;
@@ -573,10 +596,21 @@
   $("replay").addEventListener("click", () => (guide.w ? showNextStroke() : lesson()));
   $("next").addEventListener("click", nextItem);
   $("done-home").addEventListener("click", () => openWorld(here));
+  // Keep going: after a tapped character, the one after it; otherwise the next ones in order.
+  $("done-next").addEventListener("click", () => {
+    const after = session.onlyChar && here.chars[here.chars.indexOf(session.onlyChar) + 1];
+    startWorld(here, after || undefined);
+  });
   $("open-book").addEventListener("click", renderBook);
   $("book-home").addEventListener("click", renderHome);
   $("parent-home").addEventListener("click", renderHome);
   holdToOpen($("open-parent"), 3000, renderParent);
+  $("music").addEventListener("click", () => {
+    progress.settings.music = !progress.settings.music;
+    save();
+    showMusicButton();
+    if (progress.settings.music) musicOn(); else SeaMusic.stop();
+  });
 
   const setting = (id, key) => $(id).addEventListener("change", (e) => { progress.settings[key] = e.target.checked; save(); });
   setting("set-pinyin", "pinyin");
@@ -596,7 +630,7 @@
   addEventListener("resize", () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      if ($("practice").hidden || !$("next").hidden) return;
+      if ($("practice").hidden || (session && session.turnDone)) return;
       lesson();
     }, 250);
   });
@@ -610,5 +644,6 @@
   }
 
   document.querySelectorAll("[data-icon]").forEach((el) => { el.innerHTML = ICON(el.dataset.icon); });
+  showMusicButton();
   renderHome();
 })();

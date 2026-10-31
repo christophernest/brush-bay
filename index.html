@@ -29,6 +29,7 @@
     <div id="cats" class="cats"></div>
     <nav class="home-nav">
       <button id="open-book" class="round big" aria-label="Sticker book"><span data-icon="book"></span></button>
+      <button id="music" class="round small" aria-label="Music on or off"></button>
       <button id="open-parent" class="round small hold" aria-label="Parent corner (hold for 3 seconds)"><span data-icon="gear"></span><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/></svg></button>
     </nav>
   </main>
@@ -73,7 +74,10 @@
     <div class="guide big" id="done-guide"></div>
     <div id="done-stars" class="done-stars"></div>
     <div id="done-new" class="done-new"></div>
-    <button id="done-home" class="pill go" aria-label="Back to this sea"><span data-icon="home"></span></button>
+    <div class="done-actions">
+      <button id="done-home" class="round" aria-label="Back to this sea"><span data-icon="home"></span></button>
+      <button id="done-next" class="pill go" aria-label="Next character"><span data-icon="next"></span></button>
+    </div>
   </main>
 
   <!-- Sticker book -->
@@ -115,7 +119,7 @@
       </section>
       <section>
         <h3>Credits</h3>
-        <p>Stroke order and checking: <a href="https://hanziwriter.org" target="_blank" rel="noopener">Hanzi Writer</a> 3.7.3 by David Chanin (MIT licence). Stroke data: hanzi-writer-data 2.0.1, from the <a href="https://github.com/skishore/makemeahanzi" target="_blank" rel="noopener">Make Me a Hanzi</a> project, based on fonts by Arphic Technology (Arphic Public License). Licence texts are in the <code>licenses</code> folder. Pictures were drawn for this app with Claude. The voice is a computer voice: recorded clips where they have been made (Apple's Tingting voice or Microsoft Azure neural text to speech), otherwise this device's built-in speech.</p>
+        <p>Stroke order and checking: <a href="https://hanziwriter.org" target="_blank" rel="noopener">Hanzi Writer</a> 3.7.3 by David Chanin (MIT licence). Stroke data: hanzi-writer-data 2.0.1, from the <a href="https://github.com/skishore/makemeahanzi" target="_blank" rel="noopener">Make Me a Hanzi</a> project, based on fonts by Arphic Technology (Arphic Public License). Licence texts are in the <code>licenses</code> folder. Pictures were drawn for this app with Claude. The background music is made live by the app itself (written with Claude), so it uses no recordings. The voice is a computer voice: recorded clips where they have been made (Apple's Tingting voice or Microsoft Azure neural text to speech), otherwise this device's built-in speech.</p>
         <p>Made with Claude Code. An unofficial fan project, not affiliated with Anthropic. Progress is saved only on this device.</p>
       </section>
     </div>
@@ -125,6 +129,7 @@
   <script src="words.js"></script>
   <script src="characters.js"></script>
   <script src="pictures.js"></script>
+  <script src="music.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
