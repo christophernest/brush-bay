@@ -140,7 +140,6 @@ button {
 .swimmer.flip .body { transform: scaleX(-1); }
 .swimmer svg { width: 100%; height: 100%; display: block; }
 @keyframes bob { 50% { translate: 0 -5px; } }
-.empty-bubble { display: inline-block; width: 30px; height: 30px; border-radius: 50%; border: 3px solid rgba(255,255,255,.6); background: rgba(255,255,255,.12); }
 
 /* Plants and rocks along the sea floor, different for each category */
 #plants { position: fixed; left: 0; right: 0; bottom: 5vh; height: 26vh; z-index: -1; pointer-events: none; }
@@ -208,20 +207,26 @@ button {
   padding: 4px 2px 20px;
   position: relative; z-index: 5;
 }
+/* Everything inside a bubble is placed and sized by the bubble itself (cqw = 1% of the bubble's width),
+   never by the screen, so it looks the same at every size and in every browser. */
 .word {
   position: relative;
   aspect-ratio: 1;
+  padding: 0;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 25%, #fff 0%, #f4fbff 40%, #d6eef8 100%);
   box-shadow: inset -6px -8px 0 rgba(11,79,122,.10), 0 6px 0 rgba(0,0,0,.15);
-  display: grid; place-items: center;
-  font-size: clamp(40px, 10vw, 58px);
-  font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+  container-type: inline-size;
   color: var(--ink);
-  padding-bottom: 14%; /* lifts the character clear of its stars */
 }
-.word .word-stars { position: absolute; bottom: 10%; left: 0; right: 0; }
-.word .word-stars i { width: clamp(14px, 3.4vw, 20px); height: clamp(14px, 3.4vw, 20px); }
+.word-char {
+  position: absolute; left: 0; right: 0; top: 16%; height: 52%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+  font-size: 40cqw; line-height: 1;
+}
+.word .word-stars { position: absolute; top: 70%; left: 0; right: 0; height: 13cqw; gap: 1cqw; }
+.word .word-stars i { width: 12cqw; height: 12cqw; }
 .word.got { box-shadow: inset -6px -8px 0 rgba(11,79,122,.10), 0 0 0 4px var(--gold), 0 6px 0 rgba(0,0,0,.15); }
 
 .home-nav { display: flex; justify-content: space-between; align-items: center; }
@@ -292,6 +297,11 @@ button {
   .stage { flex-direction: row; }
   .picture { width: clamp(120px, 26vh, 210px); }
 }
+/* Short phones held upright: the picture sits beside its character and meaning, leaving room to write. */
+@media (orientation: portrait) and (max-height: 700px) {
+  .card { display: grid; grid-template-columns: auto auto; column-gap: 14px; align-items: center; justify-items: center; padding: 10px 18px; }
+  .card .picture { grid-row: 1 / span 3; width: clamp(84px, 17vh, 120px); }
+}
 
 .actions { display: flex; justify-content: center; gap: 16px; min-height: 64px; }
 
@@ -327,21 +337,31 @@ button {
 .stickers {
   flex: 1; overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
   gap: 10px;
   align-content: start;
   padding-bottom: 20px;
+  position: relative; z-index: 5;
 }
+.sticker-group { grid-column: 1 / -1; margin: 10px 0 0; color: #fff; font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 22px; text-shadow: 0 2px 0 rgba(0,0,0,.2); }
+.sticker-group small { font-family: system-ui, sans-serif; font-size: 14px; font-weight: 700; opacity: .85; margin-left: 6px; }
+/* Sized by the sticker itself (cqw), like the word bubbles */
 .sticker {
+  position: relative;
   aspect-ratio: 1;
+  padding: 0;
   border-radius: 18px;
   background: var(--card);
-  font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
-  font-size: 44px;
-  display: grid; place-items: center;
   box-shadow: 0 4px 0 rgba(0,0,0,.15);
+  container-type: inline-size;
 }
-.sticker.locked { background: rgba(255,255,255,.25); color: rgba(255,255,255,.6); box-shadow: none; font-size: 28px; }
+.sticker-pic { position: absolute; left: 17%; right: 17%; top: 4%; aspect-ratio: 1; }
+.sticker-pic svg { display: block; width: 100%; height: 100%; }
+.sticker-char { position: absolute; left: 0; right: 0; bottom: 4%; height: 24cqw; display: flex; align-items: center; justify-content: center;
+  font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 20cqw; line-height: 1; color: var(--ink); }
+.sticker.locked { background: rgba(255,255,255,.3); box-shadow: none; }
+.sticker.locked .sticker-pic { filter: grayscale(1); opacity: .35; }
+.sticker.locked .sticker-char { color: rgba(255,255,255,.75); }
 .sticker.bounce { animation: pop .5s cubic-bezier(.2,1.6,.4,1); }
 .sticker .s { display: flex; gap: 0; font-size: 11px; position: absolute; }
 

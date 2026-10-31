@@ -301,7 +301,7 @@
       const got = stageOf(c) >= MASTERED;
       b.className = "word" + (got ? " got" : "");
       b.setAttribute("aria-label", `${c}, ${best} of 3 stars${got ? ", mastered" : ""}`);
-      b.innerHTML = `${c}<span class="word-stars">${starRow(best)}</span>`;
+      b.innerHTML = `<span class="word-char">${c}</span><span class="word-stars">${starRow(best)}</span>`;
       b.addEventListener("click", () => startWorld(w, c));
       $("words").appendChild(b);
     });
@@ -537,15 +537,23 @@
 
   // ---------- Sticker book ----------
   function renderBook() {
+    // Every character's sticker, by category: faded until it's mastered, then in full colour.
     $("stickers").innerHTML = "";
-    WORDS.forEach((w) => {
-      const b = document.createElement("button");
-      const got = stageOf(w.char) >= MASTERED;
-      b.className = "sticker" + (got ? "" : " locked");
-      b.innerHTML = got ? w.char : "<i class='empty-bubble'></i>";
-      b.setAttribute("aria-label", got ? w.char : "Not collected yet");
-      if (got) b.addEventListener("click", () => { sayWord(w); restartAnim(b, "bounce"); });
-      $("stickers").appendChild(b);
+    WORLDS.forEach((world) => {
+      const h = document.createElement("h3");
+      h.className = "sticker-group";
+      h.innerHTML = `${world.zh} <small>${world.name}</small>`;
+      $("stickers").appendChild(h);
+      world.chars.forEach((c) => {
+        const w = WORD[c];
+        const b = document.createElement("button");
+        const got = stageOf(c) >= MASTERED;
+        b.className = "sticker" + (got ? "" : " locked");
+        b.innerHTML = `<span class="sticker-pic">${PICTURE_SVG(c)}</span><span class="sticker-char">${c}</span>`;
+        b.setAttribute("aria-label", got ? `${c}, ${w.meaning}` : `${c}, not collected yet`);
+        if (got) b.addEventListener("click", () => { sayWord(w); restartAnim(b, "bounce"); });
+        $("stickers").appendChild(b);
+      });
     });
     show("book");
   }
