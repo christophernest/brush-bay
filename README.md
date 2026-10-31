@@ -13,4 +13,4 @@ A small web app for young children to practise writing Chinese characters with a
 - Stroke data: hanzi-writer-data 2.0.1, from the [Make Me a Hanzi](https://github.com/skishore/makemeahanzi) project, based on fonts by Arphic Technology, Arphic Public License (`licenses/ARPHICPL.TXT`)
 - Pictures and icons: drawn for this app with Claude
 - Background music: made live by the app itself in the browser (`music.js`, written with Claude), so it uses no recordings
-- Voice: a computer voice. Clips from `tools/make_audio.py` where they exist (Apple's Tingting voice on the Mac, or Microsoft Azure's Xiaoxiao), otherwise the device's own built-in speech
+- Voice: a parent's own voice, recorded for this app and cut into clips; any character without a clip uses the device's own built-in speech

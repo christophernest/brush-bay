@@ -100,7 +100,7 @@
     pickVoice();
     speechSynthesis.addEventListener?.("voiceschanged", pickVoice);
   }
-  // ---------- Voice clips (natural neural voice, made by tools/make_audio.py) ----------
+  // ---------- Voice clips (a recording cut by tools/cut_recording.py, or made by tools/make_audio.py) ----------
   // Each character has "<code>-say.mp3" (the voice line) and "<code>.mp3" (the character alone).
   // Clips play through Web Audio so they also work after a short delay, not only straight after a tap.
   let clips = new Set();
@@ -123,13 +123,26 @@
       buffers[name] = await ctx.decodeAudioData(data);
     }
     if (my !== voiceToken) return;  // a newer line was asked for while this one loaded
-    if (playClip.current) try { playClip.current.stop(); } catch (e) {}
+    stopClip();
     const src = ctx.createBufferSource();
+    const level = ctx.createGain();
     src.buffer = buffers[name];
-    src.connect(ctx.destination);
+    src.connect(level).connect(ctx.destination);
     SeaMusic.duck(src.buffer.duration + 0.3);
     src.start();
-    playClip.current = src;
+    playClip.current = { src, level };
+  }
+  // Stop the clip that's playing with a quick fade, never a sudden cut (which clicks).
+  function stopClip() {
+    const c = playClip.current;
+    if (!c) return;
+    playClip.current = null;
+    try {
+      const t = audio.currentTime;
+      c.level.gain.setValueAtTime(c.level.gain.value, t);
+      c.level.gain.linearRampToValueAtTime(0, t + 0.04);
+      c.src.stop(t + 0.05);
+    } catch (e) {}
   }
 
   // Say a character: kind "say" is its voice line (大，大象); "char" is the character alone.
@@ -147,7 +160,7 @@
   // The device's own voice: the fallback when there's no clip.
   function speak(text) {
     voiceToken++;
-    if (playClip.current) try { playClip.current.stop(); } catch (e) {}
+    stopClip();
     if (!("speechSynthesis" in window)) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
@@ -573,7 +586,7 @@
     pickVoice();
     const haveClips = WORDS.filter((w) => clips.has(`${w.char.codePointAt(0).toString(16)}-say.mp3`)).length;
     $("voice-status").textContent = haveClips
-      ? `Natural voice clips (${clipVoice}, a computer voice from Microsoft Azure) for ${haveClips} of ${WORDS.length} characters.` +
+      ? `Recorded voice clips (${clipVoice}) for ${haveClips} of ${WORDS.length} characters.` +
         (haveClips < WORDS.length ? " The rest use this device's own voice." : "")
       : !("speechSynthesis" in window)
       ? "This browser has no speech support, so the speaker button stays silent."
