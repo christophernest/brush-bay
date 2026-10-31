@@ -420,7 +420,7 @@ window.WORDS = [
  {
   "char": "从",
   "pinyin": "cóng",
-  "meaning": "follow",
+  "meaning": "from",
   "strokes": 4,
   "say": "从，从前",
   "world": 3
