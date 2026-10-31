@@ -119,7 +119,7 @@
     playClip.current = src;
   }
 
-  // Say a character: kind "say" is its voice line (大，大象的大); "char" is the character alone.
+  // Say a character: kind "say" is its voice line (大，大象); "char" is the character alone.
   function sayWord(word, kind = "say") {
     const name = `${word.char.codePointAt(0).toString(16)}${kind === "say" ? "-say" : ""}.mp3`;
     const text = kind === "say" ? word.say : word.char;
@@ -265,6 +265,11 @@
       $("cats").appendChild(b);
     });
     show("home");
+    // Some creatures are drawn off-centre in their 100x100 box (a fin, a curled tail); centre each in its circle.
+    document.querySelectorAll(".cat-creature svg").forEach((svg) => {
+      const b = svg.getBBox();
+      if (b.width) svg.setAttribute("viewBox", `${b.x + b.width / 2 - 50} ${b.y + b.height / 2 - 50} 100 100`);
+    });
   }
 
   // ---------- A category page: its characters in order ----------

@@ -31,14 +31,9 @@
     9: [[28, 29], [50, 29], [72, 29], [28, 50], [50, 50], [72, 50], [28, 71], [50, 71], [72, 71]],
     10: [[30, 29], [50, 29], [70, 29], [20, 50], [40, 50], [60, 50], [80, 50], [30, 71], [50, 71], [70, 71]],
   };
-  // Numbers show the numeral itself, big and bold, like a sticker. (Counting fish were too hard to read.)
-  const NUM_COLOURS = [[K.orange, K.rust], [K.pink, K.rose], [K.blue, K.navy], [K.green, K.deep], [K.purple, "#7a5fc4"]];
-  const numeral = (n) => {
-    const [c, shade] = NUM_COLOURS[(n - 1) % NUM_COLOURS.length];
-    const size = n >= 10 ? 52 : 66;
-    const text = (fill, dy) => `<text x="50" y="${72 + dy}" text-anchor="middle" font-family="ui-rounded, 'SF Pro Rounded', 'Arial Rounded MT Bold', system-ui, sans-serif" font-weight="800" font-size="${size}" fill="${fill}">${n}</text>`;
-    return text(shade, 3) + text(c, 0);
-  };
+  // Place any 100×100 drawing at (x, y), scaled by s; flip mirrors it left to right.
+  const mini = (art, x, y, s, flip = false) =>
+    `<g transform="translate(${x} ${y}) scale(${flip ? -s : s} ${s}) translate(-50 -50)">${art}</g>`;
 
   const face = (x, y, s = 1) =>
     `<circle cx="${x - 3.5 * s}" cy="${y}" r="${1.4 * s}" fill="${K.ink}"/><circle cx="${x + 3.5 * s}" cy="${y}" r="${1.4 * s}" fill="${K.ink}"/>
@@ -126,7 +121,6 @@
   // ---------- The 101 pictures ----------
   const ART = {
     // World 1: First lines
-    "一": numeral(1), "二": numeral(2), "十": numeral(10), "三": numeral(3),
     "人": person(50, 84, 1.05, { pose: "walk" }),
     "力": `<rect x="14" y="58" width="16" height="24" rx="5" fill="${K.blue}"/>
            <path d="M28 70 H54 Q64 70 64 60 V38" stroke="${K.skin}" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -141,9 +135,6 @@
            <circle cx="27" cy="41" r="2.8" fill="${K.ink}"/>`,
     "天": `${SKY}<circle cx="70" cy="30" r="9" fill="${K.yellow}"/>${cloud(38, 32, 0.8)}
            <path d="M14 76 Q50 66 86 76 L80 88 H20 Z" fill="${K.green}"/>${person(50, 82, 0.55, { pose: "wide", shirt: K.pink })}`,
-
-    // World 2: Numbers
-    "七": numeral(7), "八": numeral(8), "九": numeral(9), "五": numeral(5), "六": numeral(6), "四": numeral(4),
 
     // World 3: Boxes
     "口": `<path d="M18 46 Q50 30 82 46 Q70 80 50 80 Q30 80 18 46 Z" fill="${K.red}"/>
@@ -383,6 +374,67 @@
     star: `<path d="M50 14 L60 38 L86 40 L66 57 L72 84 L50 70 L28 84 L34 57 L14 40 L40 38 Z" fill="${K.orange}" stroke="${K.orange}" stroke-width="6" stroke-linejoin="round"/>
            <g fill="${K.cream}"><circle cx="50" cy="34" r="2.5"/><circle cx="62" cy="50" r="2.5"/><circle cx="38" cy="50" r="2.5"/><circle cx="56" cy="64" r="2.5"/><circle cx="44" cy="64" r="2.5"/></g>`,
   };
+
+  // ---------- Numbers: each picture shows what its voice line counts (一只小狗, 三只小猫 …) ----------
+  // Items are kept apart in tidy rows so a 4-year-old can count them. 二 is second place (第二名), since you count things with 两, not 二.
+  const kitten = (c, d) => `<path d="M24 44 L26 14 L46 30 Z M76 44 L74 14 L54 30 Z" fill="${c}"/>
+      <path d="M29 34 L30 22 L39 30 Z M71 34 L70 22 L61 30 Z" fill="${K.blush}"/>
+      <ellipse cx="50" cy="54" rx="30" ry="27" fill="${c}"/><ellipse cx="50" cy="66" rx="14" ry="10" fill="${d}"/>
+      <circle cx="39" cy="50" r="4" fill="${K.ink}"/><circle cx="61" cy="50" r="4" fill="${K.ink}"/>
+      <path d="M46 60 H54 L50 65 Z" fill="${K.pink}"/>
+      <path d="M36 62 H18 M36 67 L20 72 M64 62 H82 M64 67 L80 72" stroke="${K.ink}" stroke-width="2" stroke-linecap="round"/>`;
+  const duckling = `<ellipse cx="58" cy="62" rx="30" ry="21" fill="${K.yellow}"/><path d="M60 58 Q72 50 82 60 Q72 70 60 64 Z" fill="${K.sun}"/>
+      <circle cx="34" cy="38" r="18" fill="${K.yellow}"/><path d="M18 36 L4 42 L18 47 Z" fill="${K.orange}"/>
+      <circle cx="30" cy="34" r="3.5" fill="${K.ink}"/><path d="M50 82 V88 M64 82 V88" stroke="${K.orange}" stroke-width="5" stroke-linecap="round"/>`;
+  const balloon = (c, d) => `<path d="M50 74 Q45 80 51 84 Q56 88 50 92" stroke="${K.slate}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M45 76 L55 76 L50 68 Z" fill="${d}"/><ellipse cx="50" cy="40" rx="25" ry="29" fill="${c}"/>
+      <ellipse cx="40" cy="28" rx="6" ry="9" fill="#ffffff" fill-opacity=".5" transform="rotate(20 40 28)"/>`;
+  const bigStar = `<path d="M50 10 L61 37 L90 39 L68 58 L75 87 L50 71 L25 87 L32 58 L10 39 L39 37 Z" fill="${K.yellow}" stroke="${K.yellow}" stroke-width="6" stroke-linejoin="round"/>
+      <circle cx="44" cy="40" r="6" fill="${K.cream}"/>`;
+  const flowerHead = (c) => `<g fill="${c}"><circle cx="50" cy="20" r="15"/><circle cx="78" cy="41" r="15"/><circle cx="68" cy="74" r="15"/><circle cx="32" cy="74" r="15"/><circle cx="22" cy="41" r="15"/></g>
+      <circle cx="50" cy="50" r="13" fill="${K.yellow}"/>`;
+  // An open hand with five separate fingers, so each one can be counted. Thumb on the left (thumbs point outwards in 十).
+  const openHand = `<g fill="${K.skin}"><rect x="30" y="48" width="44" height="40" rx="14"/>
+      <rect x="31" y="20" width="9.5" height="40" rx="4.75"/><rect x="42.5" y="12" width="9.5" height="46" rx="4.75"/>
+      <rect x="54" y="15" width="9.5" height="44" rx="4.75"/><rect x="65.5" y="24" width="8.5" height="36" rx="4.25"/>
+</g>
+      <path d="M36 74 L17 48" stroke="${K.skin}" stroke-width="9.5" stroke-linecap="round"/>`;
+  const BALLOONS = [[K.red, K.berry], [K.blue, K.navy], [K.yellow, K.sun], [K.green, K.deep], [K.pink, K.rose], [K.purple, "#7a5fc4"], [K.orange, K.rust]];
+  const grid = (cols, rows, x0, x1, y0, y1) => {
+    const out = [];
+    for (let r = 0; r < rows.length; r++) for (let c = 0; c < rows[r]; c++) {
+      const n = rows[r], span = (x1 - x0) * (n - 1) / (cols - 1);
+      out.push([50 - span / 2 + (n > 1 ? span * c / (n - 1) : 0), rows.length > 1 ? y0 + (y1 - y0) * r / (rows.length - 1) : (y0 + y1) / 2]);
+    }
+    return out;
+  };
+  Object.assign(ART, {
+    "一": mini(ART["狗"], 50, 50, 1),
+    "二": `<rect x="38" y="44" width="24" height="44" rx="3" fill="${K.mist}"/><rect x="62" y="64" width="26" height="24" rx="3" fill="${K.mist}"/>
+      <rect x="12" y="56" width="26" height="32" rx="3" fill="${K.blue}"/>
+      <g font-family="ui-rounded, system-ui, sans-serif" font-weight="800" text-anchor="middle">
+        <text x="25" y="80" font-size="20" fill="${K.white}">2</text>
+        <text x="50" y="70" font-size="16" fill="${K.white}">1</text><text x="75" y="82" font-size="14" fill="${K.white}">3</text></g>
+      <path d="M18 36 L10 24 M32 36 L40 24" stroke="${K.skin}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M21 50 V56 M29 50 V56" stroke="${K.ink}" stroke-width="5" stroke-linecap="round"/>
+      <rect x="16" y="32" width="18" height="20" rx="7" fill="${K.pink}"/>
+      <circle cx="25" cy="22" r="9" fill="${K.skin}"/><path d="M16 21 Q17 11 25 11 Q33 11 34 21 Q30 15 25 15 Q20 15 16 21 Z" fill="${K.soil}"/>
+      <circle cx="22" cy="22" r="1.5" fill="${K.ink}"/><circle cx="28" cy="22" r="1.5" fill="${K.ink}"/><path d="M22 26 Q25 28.5 28 26" stroke="${K.ink}" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M21 32 L25 40 L29 32" stroke="${K.red}" stroke-width="2.5" fill="none"/><circle cx="25" cy="43" r="4.5" fill="#dfe4ee" stroke="${K.grey}" stroke-width="1.5"/>`,
+    "三": [[30, 37, K.orange, K.cream], [70, 37, K.grey, K.white], [50, 69, K.wood, K.cream]]
+      .map(([x, y, c, d]) => mini(kitten(c, d), x, y, 0.4)).join(""),
+    "四": [[32, 36], [68, 36], [32, 64], [68, 64]].map(([x, y], i) => fish(x, y, 0.36, i)).join(""),
+    "五": grid(3, [3, 2], 22, 78, 36, 66).map(([x, y], i) => mini(flowerHead([K.pink, K.red, K.purple, K.orange, K.rose][i]), x, y, 0.27)).join(""),
+    "六": grid(3, [3, 3], 26, 74, 38, 66).map(([x, y]) => mini(duckling, x, y, 0.26)).join(""),
+    "七": grid(4, [3, 4], 22, 78, 36, 64).map(([x, y]) => mini(bigStar, x, y, 0.2)).join(""),
+    "八": `<path d="M33 42 Q20 40 12 48 Q8 54 13 56 M36 48 Q22 54 17 66 Q14 74 20 74 M40 54 Q30 66 27 82 M45 57 Q44 74 41 86 Q39 92 45 92
+             M67 42 Q80 40 88 48 Q92 54 87 56 M64 48 Q78 54 83 66 Q86 74 80 74 M60 54 Q70 66 73 82 M55 57 Q56 74 59 86 Q61 92 55 92"
+             stroke="${K.purple}" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="50" cy="36" rx="20" ry="20" fill="${K.purple}"/><circle cx="43" cy="36" r="3.5" fill="${K.ink}"/><circle cx="57" cy="36" r="3.5" fill="${K.ink}"/>
+      <path d="M46 43 Q50 46 54 43" stroke="${K.ink}" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="43" cy="25" rx="5" ry="3.5" fill="${K.lilac}"/>`,
+    "九": grid(3, [3, 3, 3], 26, 74, 23, 71).map(([x, y], i) => mini(balloon(...BALLOONS[i % BALLOONS.length]), x, y, 0.26)).join(""),
+    "十": mini(openHand, 30, 52, 0.56) + mini(openHand, 70, 52, 0.56, true),
+  });
 
   // ---------- Buttons and small marks (simple line icons) ----------
   const line = (d, extra = "") => `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${d}${extra}</svg>`;

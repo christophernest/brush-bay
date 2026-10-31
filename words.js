@@ -198,7 +198,7 @@ window.WORDS = [
   "pinyin": "yī",
   "meaning": "one",
   "strokes": 1,
-  "say": "一，一个的一",
+  "say": "一，一只小狗",
   "world": 1
  },
  {
@@ -206,7 +206,7 @@ window.WORDS = [
   "pinyin": "èr",
   "meaning": "two",
   "strokes": 2,
-  "say": "二，二月的二",
+  "say": "二，第二名",
   "world": 1
  },
  {
@@ -214,7 +214,7 @@ window.WORDS = [
   "pinyin": "sān",
   "meaning": "three",
   "strokes": 3,
-  "say": "三，三个的三",
+  "say": "三，三只小猫",
   "world": 1
  },
  {
@@ -222,7 +222,7 @@ window.WORDS = [
   "pinyin": "sì",
   "meaning": "four",
   "strokes": 5,
-  "say": "四，四个的四",
+  "say": "四，四条小鱼",
   "world": 1
  },
  {
@@ -230,7 +230,7 @@ window.WORDS = [
   "pinyin": "wǔ",
   "meaning": "five",
   "strokes": 4,
-  "say": "五，五个的五",
+  "say": "五，五朵花",
   "world": 1
  },
  {
@@ -238,7 +238,7 @@ window.WORDS = [
   "pinyin": "liù",
   "meaning": "six",
   "strokes": 4,
-  "say": "六，六个的六",
+  "say": "六，六只小鸭子",
   "world": 1
  },
  {
@@ -246,7 +246,7 @@ window.WORDS = [
   "pinyin": "qī",
   "meaning": "seven",
   "strokes": 2,
-  "say": "七，七个的七",
+  "say": "七，七颗星星",
   "world": 1
  },
  {
@@ -254,7 +254,7 @@ window.WORDS = [
   "pinyin": "bā",
   "meaning": "eight",
   "strokes": 2,
-  "say": "八，八个的八",
+  "say": "八，章鱼有八条腿",
   "world": 1
  },
  {
@@ -262,7 +262,7 @@ window.WORDS = [
   "pinyin": "jiǔ",
   "meaning": "nine",
   "strokes": 2,
-  "say": "九，九个的九",
+  "say": "九，九个气球",
   "world": 1
  },
  {
@@ -270,7 +270,7 @@ window.WORDS = [
   "pinyin": "shí",
   "meaning": "ten",
   "strokes": 2,
-  "say": "十，十个的十",
+  "say": "十，十根手指",
   "world": 1
  },
  {
@@ -278,7 +278,7 @@ window.WORDS = [
   "pinyin": "dà",
   "meaning": "big",
   "strokes": 3,
-  "say": "大，大象的大",
+  "say": "大，大象",
   "world": 2
  },
  {
@@ -286,7 +286,7 @@ window.WORDS = [
   "pinyin": "xiǎo",
   "meaning": "small",
   "strokes": 3,
-  "say": "小，小鱼的小",
+  "say": "小，小鱼",
   "world": 2
  },
  {
@@ -294,7 +294,7 @@ window.WORDS = [
   "pinyin": "duō",
   "meaning": "many",
   "strokes": 6,
-  "say": "多，很多的多",
+  "say": "多，很多",
   "world": 2
  },
  {
@@ -302,7 +302,7 @@ window.WORDS = [
   "pinyin": "shǎo",
   "meaning": "few",
   "strokes": 4,
-  "say": "少，很少的少",
+  "say": "少，很少",
   "world": 2
  },
  {
@@ -310,7 +310,7 @@ window.WORDS = [
   "pinyin": "shàng",
   "meaning": "up",
   "strokes": 3,
-  "say": "上，上面的上",
+  "say": "上，上面",
   "world": 2
  },
  {
@@ -318,7 +318,7 @@ window.WORDS = [
   "pinyin": "xià",
   "meaning": "down",
   "strokes": 3,
-  "say": "下，下面的下",
+  "say": "下，下面",
   "world": 2
  },
  {
@@ -326,7 +326,7 @@ window.WORDS = [
   "pinyin": "zuǒ",
   "meaning": "left",
   "strokes": 5,
-  "say": "左，左手的左",
+  "say": "左，左手",
   "world": 2
  },
  {
@@ -334,7 +334,7 @@ window.WORDS = [
   "pinyin": "yòu",
   "meaning": "right",
   "strokes": 5,
-  "say": "右，右手的右",
+  "say": "右，右手",
   "world": 2
  },
  {
@@ -342,7 +342,7 @@ window.WORDS = [
   "pinyin": "zhōng",
   "meaning": "middle",
   "strokes": 4,
-  "say": "中，中国的中",
+  "say": "中，中国",
   "world": 2
  },
  {
@@ -350,7 +350,7 @@ window.WORDS = [
   "pinyin": "rén",
   "meaning": "person",
   "strokes": 2,
-  "say": "人，大人的人",
+  "say": "人，大人",
   "world": 3
  },
  {
@@ -358,7 +358,7 @@ window.WORDS = [
   "pinyin": "kǒu",
   "meaning": "mouth",
   "strokes": 3,
-  "say": "口，门口的口",
+  "say": "口，门口",
   "world": 3
  },
  {
@@ -366,7 +366,7 @@ window.WORDS = [
   "pinyin": "xīn",
   "meaning": "heart",
   "strokes": 4,
-  "say": "心，开心的心",
+  "say": "心，开心",
   "world": 3
  },
  {
@@ -374,7 +374,7 @@ window.WORDS = [
   "pinyin": "shǒu",
   "meaning": "hand",
   "strokes": 4,
-  "say": "手，小手的手",
+  "say": "手，洗手",
   "world": 3
  },
  {
@@ -382,7 +382,7 @@ window.WORDS = [
   "pinyin": "yá",
   "meaning": "tooth",
   "strokes": 4,
-  "say": "牙，刷牙的牙",
+  "say": "牙，刷牙",
   "world": 3
  },
  {
@@ -390,7 +390,7 @@ window.WORDS = [
   "pinyin": "mù",
   "meaning": "eye",
   "strokes": 5,
-  "say": "目，目光的目",
+  "say": "目，目光",
   "world": 3
  },
  {
@@ -398,7 +398,7 @@ window.WORDS = [
   "pinyin": "tóu",
   "meaning": "head",
   "strokes": 5,
-  "say": "头，头发的头",
+  "say": "头，梳头",
   "world": 3
  },
  {
@@ -406,7 +406,7 @@ window.WORDS = [
   "pinyin": "ěr",
   "meaning": "ear",
   "strokes": 6,
-  "say": "耳，耳朵的耳",
+  "say": "耳，耳朵",
   "world": 3
  },
  {
@@ -414,7 +414,7 @@ window.WORDS = [
   "pinyin": "zú",
   "meaning": "foot",
   "strokes": 7,
-  "say": "足，足球的足",
+  "say": "足，足球",
   "world": 3
  },
  {
@@ -422,7 +422,7 @@ window.WORDS = [
   "pinyin": "cóng",
   "meaning": "follow",
   "strokes": 4,
-  "say": "从，从前的从",
+  "say": "从，从前",
   "world": 3
  },
  {
@@ -430,7 +430,7 @@ window.WORDS = [
   "pinyin": "zhòng",
   "meaning": "crowd",
   "strokes": 6,
-  "say": "众，大众的众",
+  "say": "众，大众",
   "world": 3
  },
  {
@@ -438,7 +438,7 @@ window.WORDS = [
   "pinyin": "tǔ",
   "meaning": "earth",
   "strokes": 3,
-  "say": "土，土地的土",
+  "say": "土，土地",
   "world": 4
  },
  {
@@ -446,7 +446,7 @@ window.WORDS = [
   "pinyin": "shān",
   "meaning": "mountain",
   "strokes": 3,
-  "say": "山，山上的山",
+  "say": "山，爬山",
   "world": 4
  },
  {
@@ -454,7 +454,7 @@ window.WORDS = [
   "pinyin": "chuān",
   "meaning": "river",
   "strokes": 3,
-  "say": "川，山川的川",
+  "say": "川，山川",
   "world": 4
  },
  {
@@ -462,7 +462,7 @@ window.WORDS = [
   "pinyin": "shuǐ",
   "meaning": "water",
   "strokes": 4,
-  "say": "水，喝水的水",
+  "say": "水，喝水",
   "world": 4
  },
  {
@@ -470,7 +470,7 @@ window.WORDS = [
   "pinyin": "huǒ",
   "meaning": "fire",
   "strokes": 4,
-  "say": "火，火车的火",
+  "say": "火，火车",
   "world": 4
  },
  {
@@ -478,7 +478,7 @@ window.WORDS = [
   "pinyin": "mù",
   "meaning": "tree",
   "strokes": 4,
-  "say": "木，木头的木",
+  "say": "木，木头",
   "world": 4
  },
  {
@@ -486,7 +486,7 @@ window.WORDS = [
   "pinyin": "lín",
   "meaning": "woods",
   "strokes": 8,
-  "say": "林，树林的林",
+  "say": "林，树林",
   "world": 4
  },
  {
@@ -494,7 +494,7 @@ window.WORDS = [
   "pinyin": "sēn",
   "meaning": "forest",
   "strokes": 12,
-  "say": "森，森林的森",
+  "say": "森，森林",
   "world": 4
  },
  {
@@ -502,7 +502,7 @@ window.WORDS = [
   "pinyin": "shí",
   "meaning": "stone",
   "strokes": 5,
-  "say": "石，石头的石",
+  "say": "石，石头",
   "world": 4
  },
  {
@@ -510,7 +510,7 @@ window.WORDS = [
   "pinyin": "tián",
   "meaning": "field",
   "strokes": 5,
-  "say": "田，田野的田",
+  "say": "田，种田",
   "world": 4
  },
  {
@@ -518,7 +518,7 @@ window.WORDS = [
   "pinyin": "hǎi",
   "meaning": "sea",
   "strokes": 10,
-  "say": "海，大海的海",
+  "say": "海，大海",
   "world": 4
  },
  {
@@ -526,7 +526,7 @@ window.WORDS = [
   "pinyin": "tiān",
   "meaning": "sky",
   "strokes": 4,
-  "say": "天，天空的天",
+  "say": "天，天空",
   "world": 5
  },
  {
@@ -534,7 +534,7 @@ window.WORDS = [
   "pinyin": "rì",
   "meaning": "sun",
   "strokes": 4,
-  "say": "日，日出的日",
+  "say": "日，日出",
   "world": 5
  },
  {
@@ -542,7 +542,7 @@ window.WORDS = [
   "pinyin": "yuè",
   "meaning": "moon",
   "strokes": 4,
-  "say": "月，月亮的月",
+  "say": "月，月亮",
   "world": 5
  },
  {
@@ -550,7 +550,7 @@ window.WORDS = [
   "pinyin": "míng",
   "meaning": "bright",
   "strokes": 8,
-  "say": "明，明天的明",
+  "say": "明，明天",
   "world": 5
  },
  {
@@ -558,7 +558,7 @@ window.WORDS = [
   "pinyin": "bái",
   "meaning": "white",
   "strokes": 5,
-  "say": "白，白色的白",
+  "say": "白，白色",
   "world": 5
  },
  {
@@ -566,7 +566,7 @@ window.WORDS = [
   "pinyin": "yún",
   "meaning": "cloud",
   "strokes": 4,
-  "say": "云，白云的云",
+  "say": "云，白云",
   "world": 5
  },
  {
@@ -574,7 +574,7 @@ window.WORDS = [
   "pinyin": "fēng",
   "meaning": "wind",
   "strokes": 4,
-  "say": "风，大风的风",
+  "say": "风，大风",
   "world": 5
  },
  {
@@ -582,7 +582,7 @@ window.WORDS = [
   "pinyin": "qì",
   "meaning": "air",
   "strokes": 4,
-  "say": "气，天气的气",
+  "say": "气，天气",
   "world": 5
  },
  {
@@ -590,7 +590,7 @@ window.WORDS = [
   "pinyin": "yǔ",
   "meaning": "rain",
   "strokes": 8,
-  "say": "雨，下雨的雨",
+  "say": "雨，下雨",
   "world": 5
  },
  {
@@ -598,7 +598,7 @@ window.WORDS = [
   "pinyin": "xuě",
   "meaning": "snow",
   "strokes": 11,
-  "say": "雪，下雪的雪",
+  "say": "雪，下雪",
   "world": 5
  },
  {
@@ -606,7 +606,7 @@ window.WORDS = [
   "pinyin": "diàn",
   "meaning": "electricity",
   "strokes": 5,
-  "say": "电，电视的电",
+  "say": "电，电视",
   "world": 5
  },
  {
@@ -614,7 +614,7 @@ window.WORDS = [
   "pinyin": "guāng",
   "meaning": "light",
   "strokes": 6,
-  "say": "光，阳光的光",
+  "say": "光，阳光",
   "world": 5
  },
  {
@@ -622,7 +622,7 @@ window.WORDS = [
   "pinyin": "mǎ",
   "meaning": "horse",
   "strokes": 3,
-  "say": "马，小马的马",
+  "say": "马，小马",
   "world": 6
  },
  {
@@ -630,7 +630,7 @@ window.WORDS = [
   "pinyin": "niú",
   "meaning": "cow",
   "strokes": 4,
-  "say": "牛，牛奶的牛",
+  "say": "牛，牛奶",
   "world": 6
  },
  {
@@ -638,7 +638,7 @@ window.WORDS = [
   "pinyin": "niǎo",
   "meaning": "bird",
   "strokes": 5,
-  "say": "鸟，小鸟的鸟",
+  "say": "鸟，小鸟",
   "world": 6
  },
  {
@@ -646,7 +646,7 @@ window.WORDS = [
   "pinyin": "máo",
   "meaning": "hair, feather",
   "strokes": 4,
-  "say": "毛，羽毛的毛",
+  "say": "毛，羽毛",
   "world": 6
  },
  {
@@ -654,7 +654,7 @@ window.WORDS = [
   "pinyin": "yáng",
   "meaning": "sheep",
   "strokes": 6,
-  "say": "羊，小羊的羊",
+  "say": "羊，小羊",
   "world": 6
  },
  {
@@ -662,7 +662,7 @@ window.WORDS = [
   "pinyin": "chóng",
   "meaning": "insect, worm",
   "strokes": 6,
-  "say": "虫，虫子的虫",
+  "say": "虫，虫子",
   "world": 6
  },
  {
@@ -670,7 +670,7 @@ window.WORDS = [
   "pinyin": "yú",
   "meaning": "fish",
   "strokes": 8,
-  "say": "鱼，小鱼的鱼",
+  "say": "鱼，小鱼",
   "world": 6
  },
  {
@@ -678,7 +678,7 @@ window.WORDS = [
   "pinyin": "gǒu",
   "meaning": "dog",
   "strokes": 8,
-  "say": "狗，小狗的狗",
+  "say": "狗，小狗",
   "world": 6
  },
  {
@@ -686,7 +686,7 @@ window.WORDS = [
   "pinyin": "hé",
   "meaning": "rice plant",
   "strokes": 5,
-  "say": "禾，禾苗的禾",
+  "say": "禾，禾苗",
   "world": 7
  },
  {
@@ -694,7 +694,7 @@ window.WORDS = [
   "pinyin": "mǐ",
   "meaning": "rice",
   "strokes": 6,
-  "say": "米，米饭的米",
+  "say": "米，米饭",
   "world": 7
  },
  {
@@ -702,7 +702,7 @@ window.WORDS = [
   "pinyin": "zhú",
   "meaning": "bamboo",
   "strokes": 6,
-  "say": "竹，竹子的竹",
+  "say": "竹，竹子",
   "world": 7
  },
  {
@@ -710,7 +710,7 @@ window.WORDS = [
   "pinyin": "guā",
   "meaning": "melon",
   "strokes": 5,
-  "say": "瓜，西瓜的瓜",
+  "say": "瓜，西瓜",
   "world": 7
  },
  {
@@ -718,7 +718,7 @@ window.WORDS = [
   "pinyin": "dòu",
   "meaning": "bean",
   "strokes": 7,
-  "say": "豆，豆子的豆",
+  "say": "豆，豆子",
   "world": 7
  },
  {
@@ -726,7 +726,7 @@ window.WORDS = [
   "pinyin": "huā",
   "meaning": "flower",
   "strokes": 7,
-  "say": "花，小花的花",
+  "say": "花，种花",
   "world": 7
  },
  {
@@ -734,7 +734,7 @@ window.WORDS = [
   "pinyin": "guǒ",
   "meaning": "fruit",
   "strokes": 8,
-  "say": "果，水果的果",
+  "say": "果，水果",
   "world": 7
  },
  {
@@ -742,7 +742,7 @@ window.WORDS = [
   "pinyin": "rù",
   "meaning": "go in",
   "strokes": 2,
-  "say": "入，入口的入",
+  "say": "入，入口",
   "world": 8
  },
  {
@@ -750,7 +750,7 @@ window.WORDS = [
   "pinyin": "chū",
   "meaning": "go out",
   "strokes": 5,
-  "say": "出，出口的出",
+  "say": "出，出口",
   "world": 8
  },
  {
@@ -758,7 +758,7 @@ window.WORDS = [
   "pinyin": "kāi",
   "meaning": "open",
   "strokes": 4,
-  "say": "开，开门的开",
+  "say": "开，开窗",
   "world": 8
  },
  {
@@ -766,7 +766,7 @@ window.WORDS = [
   "pinyin": "guān",
   "meaning": "close",
   "strokes": 6,
-  "say": "关，关灯的关",
+  "say": "关，关灯",
   "world": 8
  },
  {
@@ -774,7 +774,7 @@ window.WORDS = [
   "pinyin": "lái",
   "meaning": "come",
   "strokes": 7,
-  "say": "来，回来的来",
+  "say": "来，回来",
   "world": 8
  },
  {
@@ -782,7 +782,7 @@ window.WORDS = [
   "pinyin": "qù",
   "meaning": "go",
   "strokes": 5,
-  "say": "去，出去的去",
+  "say": "去，出去",
   "world": 8
  },
  {
@@ -790,7 +790,7 @@ window.WORDS = [
   "pinyin": "lì",
   "meaning": "stand",
   "strokes": 5,
-  "say": "立，立正的立",
+  "say": "立，立正",
   "world": 8
  },
  {
@@ -798,7 +798,7 @@ window.WORDS = [
   "pinyin": "huí",
   "meaning": "go back",
   "strokes": 6,
-  "say": "回，回家的回",
+  "say": "回，回家",
   "world": 8
  },
  {
@@ -806,7 +806,7 @@ window.WORDS = [
   "pinyin": "lì",
   "meaning": "strength",
   "strokes": 2,
-  "say": "力，力气的力",
+  "say": "力，力气",
   "world": 8
  },
  {
@@ -814,7 +814,7 @@ window.WORDS = [
   "pinyin": "xiū",
   "meaning": "rest",
   "strokes": 6,
-  "say": "休，休息的休",
+  "say": "休，休息",
   "world": 8
  },
  {
@@ -822,7 +822,7 @@ window.WORDS = [
   "pinyin": "mén",
   "meaning": "door",
   "strokes": 3,
-  "say": "门，大门的门",
+  "say": "门，开门",
   "world": 9
  },
  {
@@ -830,7 +830,7 @@ window.WORDS = [
   "pinyin": "chē",
   "meaning": "car",
   "strokes": 4,
-  "say": "车，汽车的车",
+  "say": "车，汽车",
   "world": 9
  },
  {
@@ -838,7 +838,7 @@ window.WORDS = [
   "pinyin": "shū",
   "meaning": "book",
   "strokes": 4,
-  "say": "书，看书的书",
+  "say": "书，看书",
   "world": 9
  },
  {
@@ -846,7 +846,7 @@ window.WORDS = [
   "pinyin": "bāo",
   "meaning": "bag",
   "strokes": 5,
-  "say": "包，书包的包",
+  "say": "包，书包",
   "world": 9
  },
  {
@@ -854,7 +854,7 @@ window.WORDS = [
   "pinyin": "yī",
   "meaning": "clothes",
   "strokes": 6,
-  "say": "衣，衣服的衣",
+  "say": "衣，衣服",
   "world": 9
  },
  {
@@ -862,7 +862,7 @@ window.WORDS = [
   "pinyin": "sǎn",
   "meaning": "umbrella",
   "strokes": 6,
-  "say": "伞，雨伞的伞",
+  "say": "伞，雨伞",
   "world": 9
  },
  {
@@ -870,7 +870,7 @@ window.WORDS = [
   "pinyin": "dēng",
   "meaning": "lamp",
   "strokes": 6,
-  "say": "灯，电灯的灯",
+  "say": "灯，电灯",
   "world": 9
  },
  {
@@ -878,7 +878,7 @@ window.WORDS = [
   "pinyin": "qiú",
   "meaning": "ball",
   "strokes": 11,
-  "say": "球，网球的球",
+  "say": "球，网球",
   "world": 9
  },
  {
@@ -886,7 +886,7 @@ window.WORDS = [
   "pinyin": "wén",
   "meaning": "writing",
   "strokes": 4,
-  "say": "文，中文的文",
+  "say": "文，中文",
   "world": 9
  },
  {
@@ -894,7 +894,7 @@ window.WORDS = [
   "pinyin": "zì",
   "meaning": "character, word",
   "strokes": 6,
-  "say": "字，写字的字",
+  "say": "字，写字",
   "world": 9
  },
  {
@@ -902,7 +902,7 @@ window.WORDS = [
   "pinyin": "xué",
   "meaning": "learn",
   "strokes": 8,
-  "say": "学，上学的学",
+  "say": "学，上学",
   "world": 9
  },
  {
@@ -910,7 +910,7 @@ window.WORDS = [
   "pinyin": "nǚ",
   "meaning": "woman, girl",
   "strokes": 3,
-  "say": "女，女儿的女",
+  "say": "女，女儿",
   "world": 10
  },
  {
@@ -918,7 +918,7 @@ window.WORDS = [
   "pinyin": "zi",
   "meaning": "child",
   "strokes": 3,
-  "say": "子，孩子的子",
+  "say": "子，孩子",
   "world": 10
  },
  {
@@ -926,7 +926,7 @@ window.WORDS = [
   "pinyin": "hǎo",
   "meaning": "good",
   "strokes": 6,
-  "say": "好，你好的好",
+  "say": "好，你好",
   "world": 10
  },
  {
@@ -934,7 +934,7 @@ window.WORDS = [
   "pinyin": "mā",
   "meaning": "mum",
   "strokes": 6,
-  "say": "妈，妈妈的妈",
+  "say": "妈，妈妈",
   "world": 10
  },
  {
@@ -942,7 +942,7 @@ window.WORDS = [
   "pinyin": "bà",
   "meaning": "dad",
   "strokes": 8,
-  "say": "爸，爸爸的爸",
+  "say": "爸，爸爸",
   "world": 10
  },
  {
@@ -950,7 +950,7 @@ window.WORDS = [
   "pinyin": "wǒ",
   "meaning": "I, me",
   "strokes": 7,
-  "say": "我，我们的我",
+  "say": "我，我们",
   "world": 10
  },
  {
@@ -958,7 +958,7 @@ window.WORDS = [
   "pinyin": "jiě",
   "meaning": "big sister",
   "strokes": 8,
-  "say": "姐，姐姐的姐",
+  "say": "姐，姐姐",
   "world": 10
  },
  {
@@ -966,7 +966,7 @@ window.WORDS = [
   "pinyin": "mèi",
   "meaning": "little sister",
   "strokes": 8,
-  "say": "妹，妹妹的妹",
+  "say": "妹，妹妹",
   "world": 10
  },
  {
@@ -974,7 +974,7 @@ window.WORDS = [
   "pinyin": "dì",
   "meaning": "little brother",
   "strokes": 7,
-  "say": "弟，弟弟的弟",
+  "say": "弟，弟弟",
   "world": 10
  },
  {
@@ -982,7 +982,7 @@ window.WORDS = [
   "pinyin": "nán",
   "meaning": "man, boy",
   "strokes": 7,
-  "say": "男，男孩的男",
+  "say": "男，男孩",
   "world": 10
  },
  {
@@ -990,7 +990,7 @@ window.WORDS = [
   "pinyin": "jiā",
   "meaning": "home",
   "strokes": 10,
-  "say": "家，我家的家",
+  "say": "家，我家",
   "world": 10
  },
  {
@@ -998,7 +998,7 @@ window.WORDS = [
   "pinyin": "ài",
   "meaning": "love",
   "strokes": 10,
-  "say": "爱，可爱的爱",
+  "say": "爱，可爱",
   "world": 10
  }
 ];
