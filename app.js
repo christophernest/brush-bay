@@ -324,26 +324,13 @@
   // ---------- A practice session ----------
   let session = null;
 
-  function buildQueue(world) {
-    const fresh = world.chars.filter((c) => stageOf(c) < MASTERED).slice(0, 2);
-    const items = fresh.map((c) => ({ char: c, review: false }));
-    const learned = WORDS.map((w) => w.char)
-      .filter((c) => stageOf(c) >= MASTERED && !fresh.includes(c))
-      .sort((a, b) => charState(a).last - charState(b).last);
-    if (items.length === 0) {
-      // Whole world mastered: practise its characters again, oldest first.
-      world.chars.slice().sort((a, b) => charState(a).last - charState(b).last).slice(0, 3)
-        .forEach((c) => items.push({ char: c, review: true }));
-    } else if (learned.length) {
-      items.push({ char: learned[0], review: true });
-    }
-    return items;
-  }
-
-  // Play: the next characters in order plus one review. Tapping a character practises just that one.
-  function startWorld(world, onlyChar) {
-    const items = onlyChar ? [{ char: onlyChar, review: stageOf(onlyChar) >= MASTERED }] : buildQueue(world);
-    session = { world, onlyChar, items, i: 0, stars: [], mastered: [], newFish: 0, gained: 0, wasDone: worldDone(world), turnDone: false };
+  // A turn goes through the category's characters in order, one after another, from where it starts to the
+  // end of the category. Play starts at the first character without 3 stars yet (or the first, once all have 3);
+  // tapping a character starts there. The stars screen comes after the category's last character.
+  function startWorld(world, from) {
+    from = from || world.chars.find((c) => bestOf(c) < 3) || world.chars[0];
+    const items = world.chars.slice(world.chars.indexOf(from)).map((c) => ({ char: c, review: stageOf(c) >= MASTERED }));
+    session = { world, items, i: 0, stars: [], mastered: [], newFish: 0, gained: 0, wasDone: worldDone(world), turnDone: false };
     show("practice");
     showItem();
   }
@@ -617,10 +604,13 @@
   $("replay").addEventListener("click", () => (guide.w ? showNextStroke() : lesson()));
   $("next").addEventListener("click", nextItem);
   $("done-home").addEventListener("click", () => openWorld(here));
-  // Keep going: after a tapped character, the one after it; otherwise the next ones in order.
+  // Keep going: the category is finished, so on to the next one if it's open; otherwise this one again.
   $("done-next").addEventListener("click", () => {
-    const after = session.onlyChar && here.chars[here.chars.indexOf(session.onlyChar) + 1];
-    startWorld(here, after || undefined);
+    const i = WORLDS.indexOf(here);
+    const next = i + 1 < WORLDS.length && worldUnlocked(i + 1) ? WORLDS[i + 1] : here;
+    here = next;
+    setScene(next.scene);
+    startWorld(next);
   });
   $("open-book").addEventListener("click", renderBook);
   $("book-home").addEventListener("click", renderHome);
