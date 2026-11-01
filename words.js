@@ -915,7 +915,7 @@ window.WORDS = [
  },
  {
   "char": "子",
-  "pinyin": "zi",
+  "pinyin": "zǐ",
   "meaning": "child",
   "strokes": 3,
   "say": "子，孩子",

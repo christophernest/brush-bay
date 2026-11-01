@@ -1,4 +1,4 @@
-/* Stroke Sea background music: a gentle sea lullaby made live in the browser, so there are no recordings to licence.
+/* Brush Bay background music: a gentle sea lullaby made live in the browser, so there are no recordings to licence.
    Soft chords, a slow music-box tune on the five-note scale, waves rolling in and the odd bubble popping. Each sea plays in its own key.
    It never repeats exactly, because the tune is a small random walk over the scale. */
 window.SeaMusic = (() => {

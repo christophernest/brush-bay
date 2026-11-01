@@ -240,10 +240,6 @@ button {
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fff; }
 .bar h2 { margin: 0; font-size: 26px; }
 .bar .spacer { width: 56px; }
-.dots { display: flex; gap: 10px; }
-.dots i { width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,.35); }
-.dots i.on { background: #fff; }
-.dots i.done { background: var(--gold); }
 
 .stage {
   flex: 1;
@@ -267,9 +263,6 @@ button {
 .card-char { font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: clamp(34px, 5.5vh, 48px); line-height: 1.15; }
 .card-meaning { font-size: 17px; font-weight: 600; color: #5b6b7a; }
 .pinyin { font-size: 20px; font-weight: 700; color: var(--deep); }
-.ladder { display: flex; gap: 4px; }
-.ladder i { width: 14px; height: 6px; border-radius: 3px; background: #e3dbe9; }
-.ladder i.on { background: var(--gold); }
 
 .pads { display: flex; gap: 16px; align-items: center; justify-content: center; }
 .pad {
@@ -325,6 +318,8 @@ button {
 #done { align-items: center; justify-content: center; text-align: center; color: #fff; }
 .done-stars { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 520px; }
 .done-stars svg { width: 52px; height: 52px; }
+.done-total { font-size: 26px; }
+.done-total i { width: 36px; height: 36px; }
 .done-actions { display: flex; align-items: center; gap: 20px; }
 .done-new { font-size: 26px; font-weight: 700; min-height: 1em; }
 .creatures-new { display: flex; justify-content: center; gap: 8px; }
@@ -363,7 +358,6 @@ button {
 .sticker.locked .sticker-pic { filter: grayscale(1); opacity: .35; }
 .sticker.locked .sticker-char { color: rgba(255,255,255,.75); }
 .sticker.bounce { animation: pop .5s cubic-bezier(.2,1.6,.4,1); }
-.sticker .s { display: flex; gap: 0; font-size: 11px; position: absolute; }
 
 /* ---------- Parent corner ---------- */
 .parent { background: #f7f4fb; }

@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <title>Stroke Sea</title>
+  <title>Brush Bay</title>
   <meta name="description" content="Chinese character writing practice for young children.">
   <meta name="theme-color" content="#0b4f7a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Stroke Sea">
+  <meta name="apple-mobile-web-app-title" content="Brush Bay">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
@@ -24,12 +24,12 @@
   <main id="home" class="screen">
     <header class="home-head">
       <div class="guide" id="home-guide"></div>
-      <h1>Stroke Sea</h1>
+      <h1>Brush Bay</h1>
     </header>
     <div id="cats" class="cats"></div>
     <nav class="home-nav">
       <button id="open-book" class="round big" aria-label="Sticker book"><span data-icon="book"></span></button>
-      <button id="music" class="round small" aria-label="Music on or off"></button>
+      <button id="music" class="round small" aria-label="Music"></button>
       <button id="open-parent" class="round small hold" aria-label="Parent corner (hold for 3 seconds)"><span data-icon="gear"></span><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/></svg></button>
     </nav>
   </main>
@@ -38,7 +38,7 @@
   <main id="world" class="screen" hidden>
     <header class="bar">
       <button id="world-home" class="round" aria-label="Back to all the seas"><span data-icon="home"></span></button>
-      <h2 class="world-title"><span id="world-zh"></span><small id="world-name"></small></h2>
+      <h2 class="world-title"><span id="world-zh" lang="zh-CN"></span><small id="world-name"></small></h2>
       <span class="spacer"></span>
     </header>
     <div id="words" class="words"></div>
@@ -51,12 +51,12 @@
   <main id="practice" class="screen" hidden>
     <header class="bar">
       <button id="go-home" class="round" aria-label="Back to this sea"><span data-icon="home"></span></button>
-      <button id="say" class="round big" aria-label="Say the character"><span data-icon="speaker"></span></button>
+      <button id="say" class="round big" aria-label="Hear the word again"><span data-icon="speaker"></span></button>
     </header>
     <section class="stage">
       <div class="card">
         <div id="picture" class="picture"></div>
-        <div id="card-char" class="card-char"></div>
+        <div id="card-char" class="card-char" lang="zh-CN"></div>
         <div id="pinyin" class="pinyin"></div>
         <div id="card-meaning" class="card-meaning"></div>
       </div>
@@ -64,7 +64,6 @@
     </section>
     <footer class="actions">
       <button id="replay" class="pill" hidden><span data-icon="eye"></span> <span>Again</span></button>
-      <button id="next" class="pill go" hidden aria-label="Next"><span data-icon="next"></span></button>
     </footer>
     <div id="stars" class="stars" aria-live="polite"></div>
   </main>
@@ -73,6 +72,7 @@
   <main id="done" class="screen" hidden>
     <div class="guide big" id="done-guide"></div>
     <div id="done-stars" class="done-stars"></div>
+    <div id="done-total" class="cat-stars done-total"></div>
     <div id="done-new" class="done-new"></div>
     <div class="done-actions">
       <button id="done-home" class="round" aria-label="Back to this sea"><span data-icon="home"></span></button>
@@ -106,7 +106,7 @@
         <h3>Settings</h3>
         <label class="row"><input type="checkbox" id="set-pinyin"> Show pinyin on the picture card</label>
         <label class="row"><input type="checkbox" id="set-strict"> Stricter stroke checking</label>
-        <label class="row"><input type="checkbox" id="set-unlock"> Unlock every world</label>
+        <label class="row"><input type="checkbox" id="set-unlock"> Unlock every category</label>
       </section>
       <section>
         <h3>Voice</h3>

@@ -1,4 +1,4 @@
-/* Stroke Sea: Chinese character writing practice for a young child.
+/* Brush Bay: Chinese character writing practice for a young child.
    Each turn uses one box: the strokes play in order over a grey outline, then she writes over that outline.
    A character is mastered after four good turns; hints come later as she climbs. */
 (() => {
@@ -14,6 +14,10 @@
   try {
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
     if (saved && saved.chars) progress = { ...blank(), ...saved, settings: { ...blank().settings, ...saved.settings } };
+    // Progress saved by an older version may lack a field (best stars came later): fill in zeros, never NaN.
+    for (const [c, s] of Object.entries(progress.chars)) {
+      progress.chars[c] = { stage: +s?.stage || 0, tries: +s?.tries || 0, best: +s?.best || 0, last: +s?.last || 0 };
+    }
   } catch (e) { /* private mode or blocked storage: start fresh */ }
   const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(progress)); } catch (e) {} };
   const charState = (c) => (progress.chars[c] ||= { stage: 0, tries: 0, best: 0, last: 0 });
@@ -47,9 +51,12 @@
 
   // ---------- Sound ----------
   let audio;
+  // Play even with the iPad's silent switch on (it otherwise mutes the clips and music, but not the device's voice).
+  if (navigator.audioSession) navigator.audioSession.type = "playback";
   function audioCtx() {
     audio ||= new (window.AudioContext || window.webkitAudioContext)();
-    if (audio.state === "suspended") audio.resume();
+    // "interrupted" is how iPads report sound stopped by a call, an alarm or Siri: start it again too.
+    if (audio.state !== "running" && audio.state !== "closed") audio.resume();
     return audio;
   }
   function tone(freq, dur = 0.2, type = "sine", vol = 0.14, when = 0) {
@@ -81,7 +88,8 @@
     $("music").innerHTML = ICON(progress.settings.music ? "music" : "musicOff");
     $("music").setAttribute("aria-pressed", progress.settings.music);
   }
-  document.addEventListener("pointerdown", musicOn, { capture: true });
+  // iPads only let sound start from the end of a tap, so listen for that too (starting twice does nothing).
+  ["pointerdown", "touchend", "click"].forEach((ev) => document.addEventListener(ev, musicOn, { capture: true }));
   document.addEventListener("visibilitychange", () => (document.hidden ? SeaMusic.stop() : musicOn()));
 
   // ---------- Voice (the device's own Chinese voice) ----------
@@ -151,7 +159,9 @@
     const text = kind === "say" ? word.say : word.char;
     if (clips.has(name)) {
       if ("speechSynthesis" in window) speechSynthesis.cancel();
-      playClip(name).catch(() => speak(text));
+      const my = voiceToken + 1;  // playClip takes this number straight away
+      // If the clip can't play, use the device's voice, unless a newer line has been asked for since.
+      playClip(name).catch(() => { if (my === voiceToken) speak(text); });
     } else {
       speak(text);
     }
@@ -169,6 +179,13 @@
     u.rate = 0.8;
     SeaMusic.duck(3);
     speechSynthesis.speak(u);
+  }
+
+  // Stop whatever is being said (when she leaves the writing screen).
+  function stopVoice() {
+    voiceToken++;
+    stopClip();
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
   }
 
   // ---------- Little visual helpers ----------
@@ -212,7 +229,7 @@
   let here = null;  // the category she's in, or null on the home page
   function show(id) {
     screens.forEach((s) => ($(s).hidden = s !== id));
-    if (id !== "practice") clearPads();
+    if (id !== "practice") { clearPads(); stopVoice(); }
     // A category's creatures swim on its page and its end screen, never while she's writing.
     if (id === "world" || id === "done") fillAquarium(); else emptyAquarium();
     SeaMusic.level(id === "practice" ? 0.6 : 1);  // softer while she's writing
@@ -239,6 +256,7 @@
     $("aquarium").innerHTML = "";
   }
   function swimTo(f) {
+    if (!f.el.isConnected) return;  // the tank was emptied
     const size = f.size;
     const x = Math.random() * (innerWidth - size);
     const y = Math.random() * (innerHeight - size);
@@ -263,7 +281,7 @@
       const f = { el, size, name: here.creature, x: Math.random() * (innerWidth - size), y: Math.random() * (innerHeight - size), speed: 40 + Math.random() * 40 };
       el.style.transform = `translate(${f.x}px, ${f.y}px)`;
       swimmers.push(f);
-      setTimeout(() => swimTo(f), 200 + Math.random() * 800);
+      f.timer = setTimeout(() => swimTo(f), 200 + Math.random() * 800);
     }
   }
 
@@ -284,7 +302,7 @@
       b.style.setProperty("--bot", sc.water[2]);
       b.setAttribute("aria-label", `${w.name}, ${stars} of ${3 * w.chars.length} stars${unlocked ? "" : " (locked)"}`);
       b.innerHTML = `<span class="cat-creature">${CREATURE_SVG(w.creature)}</span>
-        <span class="cat-zh">${w.zh}</span><span class="cat-name">${w.name}</span>
+        <span class="cat-zh" lang="zh-CN">${w.zh}</span><span class="cat-name">${w.name}</span>
         <span class="cat-stars"><i class="on">${STAR_SVG}</i><b>${stars}</b> / ${3 * w.chars.length}</span>
         ${unlocked ? "" : `<span class="lock">${ICON("lock")}</span>`}`;
       b.addEventListener("click", () => {
@@ -314,7 +332,7 @@
       const got = stageOf(c) >= MASTERED;
       b.className = "word" + (got ? " got" : "");
       b.setAttribute("aria-label", `${c}, ${best} of 3 stars${got ? ", mastered" : ""}`);
-      b.innerHTML = `<span class="word-char">${c}</span><span class="word-stars">${starRow(best)}</span>`;
+      b.innerHTML = `<span class="word-char" lang="zh-CN">${c}</span><span class="word-stars">${starRow(best)}</span>`;
       b.addEventListener("click", () => startWorld(w, c));
       $("words").appendChild(b);
     });
@@ -403,9 +421,8 @@
     lesson();
   }
 
-  function buttons({ replay = false, next = false }) {
+  function buttons({ replay = false }) {
     $("replay").hidden = !replay;
-    $("next").hidden = !next;
   }
 
   // One box: the strokes play in order (and direction) over the grey outline,
@@ -504,11 +521,11 @@
       if (home === session.world) session.newFish++;
       $("stars").insertAdjacentHTML("beforeend", `<span class="fish-won">${CREATURE_SVG(home.creature)}</span>`);
     }
-    setTimeout(() => sayWord(word, "char"), 500);
+    const my = token;
+    setTimeout(() => { if (my === token) sayWord(word, "char"); }, 500);
     // Move on by itself after a moment to enjoy the stars (no Next button to find).
     session.turnDone = true;
     buttons({});
-    const my = token;
     setTimeout(() => { if (my === token) nextItem(); }, 2800);
   }
 
@@ -524,8 +541,10 @@
     $("done-guide").innerHTML = stingray();
     restartAnim($("done-guide"), "happy");
     $("done-stars").innerHTML = STAR_SVG.repeat(s.gained);  // new stars only
+    // The category's stars so far, so the screen is never empty after a turn with no new stars.
+    $("done-total").innerHTML = `<i class="on">${STAR_SVG}</i><b>${worldStars(s.world)}</b> / ${3 * s.world.chars.length}`;
     // New stickers for characters mastered, and the creatures won with 3-star turns.
-    let html = s.mastered.length ? `<span class="new-stickers">${ICON("book")} ${s.mastered.join(" ")}</span>` : "";
+    let html = s.mastered.length ? `<span class="new-stickers" lang="zh-CN">${ICON("book")} ${s.mastered.join(" ")}</span>` : "";
     if (s.newFish) {
       html += `<span class="creatures-new">${Array(s.newFish).fill(`<span class="creature">${CREATURE_SVG(s.world.creature)}</span>`).join("")}</span>`;
     }
@@ -542,14 +561,14 @@
     WORLDS.forEach((world) => {
       const h = document.createElement("h3");
       h.className = "sticker-group";
-      h.innerHTML = `${world.zh} <small>${world.name}</small>`;
+      h.innerHTML = `<span lang="zh-CN">${world.zh}</span> <small>${world.name}</small>`;
       $("stickers").appendChild(h);
       world.chars.forEach((c) => {
         const w = WORD[c];
         const b = document.createElement("button");
         const got = stageOf(c) >= MASTERED;
         b.className = "sticker" + (got ? "" : " locked");
-        b.innerHTML = `<span class="sticker-pic">${PICTURE_SVG(c)}</span><span class="sticker-char">${c}</span>`;
+        b.innerHTML = `<span class="sticker-pic">${PICTURE_SVG(c)}</span><span class="sticker-char" lang="zh-CN">${c}</span>`;
         b.setAttribute("aria-label", got ? `${c}, ${w.meaning}` : `${c}, not collected yet`);
         if (got) b.addEventListener("click", () => { sayWord(w); restartAnim(b, "bounce"); });
         $("stickers").appendChild(b);
@@ -602,7 +621,6 @@
   $("say").addEventListener("click", () => session && sayWord(current().word));
   // "Again": in guided steps, show the current stroke again; otherwise replay the whole character.
   $("replay").addEventListener("click", () => (guide.w ? showNextStroke() : lesson()));
-  $("next").addEventListener("click", nextItem);
   $("done-home").addEventListener("click", () => openWorld(here));
   // Keep going: the category is finished, so on to the next one if it's open; otherwise this one again.
   $("done-next").addEventListener("click", () => {

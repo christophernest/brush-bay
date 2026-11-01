@@ -1,4 +1,4 @@
-# Stroke Sea
+# Brush Bay
 
 A small web app for young children to practise writing Chinese characters with a finger, made with Claude Code as part of "The Claude Classroom", a personal learning project. It's an unofficial fan project, not affiliated with Anthropic.
 

@@ -1,4 +1,4 @@
-/* Stroke Sea pictures, style A "stickers": flat shapes on a white die-cut circle, no outlines.
+/* Brush Bay pictures, style A "stickers": flat shapes on a white die-cut circle, no outlines.
    Every picture is drawn here as SVG (no image files, no emoji). Each one fits a 100×100 box. */
 (() => {
   "use strict";
@@ -120,7 +120,7 @@
 
   // ---------- The 101 pictures ----------
   const ART = {
-    // World 1: First lines
+    // First lines
     "力": `<rect x="14" y="58" width="16" height="24" rx="5" fill="${K.blue}"/>
            <path d="M28 70 H54 Q64 70 64 60 V38" stroke="${K.skin}" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
            <ellipse cx="44" cy="61" rx="13" ry="10" fill="${K.skin}"/><ellipse cx="41" cy="58" rx="5" ry="3" fill="#fbe0c4"/>
@@ -135,7 +135,7 @@
     "天": `${SKY}<circle cx="70" cy="30" r="9" fill="${K.yellow}"/>${cloud(38, 32, 0.8)}
            <path d="M14 76 Q50 66 86 76 L80 88 H20 Z" fill="${K.green}"/>${person(50, 82, 0.55, { pose: "wide", shirt: K.pink })}`,
 
-    // World 3: Boxes
+    // Boxes
     "目": `<path d="M14 50 Q50 18 86 50 Q50 82 14 50 Z" fill="${K.white}" stroke="${K.mist}" stroke-width="3"/>
            <circle cx="50" cy="50" r="15" fill="${K.blue}"/><circle cx="50" cy="50" r="7" fill="${K.ink}"/><circle cx="45" cy="45" r="3.5" fill="${K.white}"/>
            <path d="M30 30 l-4 -7 M42 25 l-1 -8 M58 25 l1 -8 M70 30 l4 -7" stroke="${K.ink}" stroke-width="3" stroke-linecap="round"/>`,
@@ -147,7 +147,7 @@
            <circle cx="45" cy="45" r="2.2" fill="${K.ink}"/><circle cx="55" cy="45" r="2.2" fill="${K.ink}"/><circle cx="50" cy="50" r="2" fill="${K.pink}"/>`,
     "回": `${house(54, 58, 0.95)}${arrow("M22 70 Q12 40 30 24", K.pink)}<path d="M22 22 L36 18 L32 32 Z" fill="${K.pink}"/>`,
 
-    // World 4: Nature
+    // Nature
     "土": `<path d="M14 78 Q20 46 50 44 Q80 46 86 78 Z" fill="${K.soil}"/><path d="M22 70 Q34 58 48 60" stroke="${K.brown}" stroke-width="4" fill="none" stroke-linecap="round"/>
            <circle cx="62" cy="64" r="3" fill="${K.brown}"/><circle cx="36" cy="72" r="2.5" fill="${K.brown}"/>
            <path d="M50 46 V30" stroke="${K.deep}" stroke-width="4" stroke-linecap="round"/>
@@ -157,13 +157,13 @@
     "石": `<ellipse cx="38" cy="66" rx="22" ry="14" fill="${K.slate}"/><ellipse cx="64" cy="70" rx="18" ry="11" fill="${K.grey}"/>
            <ellipse cx="50" cy="44" rx="18" ry="13" fill="${K.grey}"/><ellipse cx="44" cy="40" rx="6" ry="3" fill="${K.mist}"/>`,
 
-    // World 5: My body
+    // My body
     "毛": `<path d="M74 18 Q30 22 24 70 Q40 74 52 64 Q74 44 74 18 Z" fill="${K.lilac}"/><path d="M74 18 Q48 40 26 82" stroke="${K.purple}" stroke-width="4" fill="none" stroke-linecap="round"/>
            <path d="M60 30 l6 6 M52 40 l7 6 M44 50 l7 6" stroke="${K.white}" stroke-width="2.5" stroke-linecap="round"/>`,
     "耳": `<path d="M40 16 Q72 14 72 44 Q72 60 60 66 Q56 70 56 78 Q56 88 44 86 Q32 84 32 70" fill="none" stroke="${K.skin}" stroke-width="14" stroke-linecap="round"/>
            <path d="M44 34 Q58 32 58 46 Q58 54 50 56" fill="none" stroke="${K.skin2}" stroke-width="6" stroke-linecap="round"/>`,
 
-    // World 6: Opposites
+    // Opposites
     "上": `<rect x="18" y="62" width="64" height="7" rx="3.5" fill="${K.slate}"/><circle cx="50" cy="38" r="15" fill="${K.red}"/><circle cx="45" cy="33" r="4" fill="#ff9a9a"/>
            ${arrow("M78 52 V22 M70 30 L78 22 L86 30", K.green)}`,
     "下": `<rect x="18" y="34" width="64" height="7" rx="3.5" fill="${K.slate}"/><circle cx="50" cy="62" r="15" fill="${K.red}"/><circle cx="45" cy="57" r="4" fill="#ff9a9a"/>
@@ -172,7 +172,7 @@
     "少": `${SKY}${fish(36, 56, 0.34, 0)}${fish(64, 44, 0.34, 2)}`,
     "多": `${SKY}${LAYOUT[10].map(([x, y], i) => fish(x, y, 0.22, i)).join("")}${fish(50, 86, 0.18, 4)}${fish(50, 14, 0.18, 3)}`,
 
-    // World 7: Around me
+    // Around me
     "车": `<path d="M16 64 V52 Q16 46 24 44 L34 30 Q36 26 42 26 H62 Q68 26 70 30 L78 44 Q86 46 86 54 V64 Z" fill="${K.red}"/>
            <path d="M38 32 H50 V44 H31 Z M54 32 H64 L70 44 H54 Z" fill="${K.sky}"/>
            <circle cx="32" cy="66" r="9" fill="${K.ink}"/><circle cx="32" cy="66" r="4" fill="${K.mist}"/><circle cx="70" cy="66" r="9" fill="${K.ink}"/><circle cx="70" cy="66" r="4" fill="${K.mist}"/>`,
@@ -189,12 +189,12 @@
            <path d="M50 50 V78 Q50 86 42 86 Q36 86 36 80" stroke="${K.slate}" stroke-width="5" fill="none" stroke-linecap="round"/>`,
     "灯": bulb(50, 52, 1.05, true),
 
-    // World 8: Moving
+    // Moving
     "去": `${stingray(58, 44, 0.5, 45)}<path d="M20 62 L32 56 M18 74 L34 66 M28 82 L40 74" stroke="${K.navy}" stroke-width="4" stroke-linecap="round" opacity=".6"/>`,
     "立": `<rect x="20" y="82" width="60" height="5" rx="2.5" fill="${K.slate}"/>${person(50, 82, 1.1, { pose: "stand", shirt: K.green })}`,
-    "来": `${stingray(50, 48, 0.85, 0)}<path d="M22 22 L30 30 M78 22 L70 30 M50 12 V20" stroke="${K.navy}" stroke-width="4" stroke-linecap="round" opacity=".6"/>`,
+    "来": `${house(30, 62, 0.72)}${stingray(64, 42, 0.42, -90)}<path d="M76 32 H84 M78 42 H86 M76 52 H84" stroke="${K.navy}" stroke-width="4" stroke-linecap="round" opacity=".6"/>`,
 
-    // World 9: Sky and weather
+    // Sky and weather
     "云": `${SKY}${cloud(50, 52, 1.35)}`,
     "风": `<path d="M16 38 H58 Q72 38 72 28 Q72 18 62 20 M16 54 H70 Q84 54 84 64 Q84 74 74 72 M22 70 H50" stroke="${K.blue}" stroke-width="6" fill="none" stroke-linecap="round"/>
            <path d="M30 22 Q38 12 46 20 Q38 30 30 22 Z" fill="${K.green}"/>`,
@@ -202,7 +202,7 @@
     "雪": `<g stroke="${K.navy}" stroke-width="5" stroke-linecap="round"><path d="M50 16 V84 M21 33 L79 67 M21 67 L79 33"/>
            <path d="M42 22 L50 30 L58 22 M42 78 L50 70 L58 78 M22 44 L32 41 L28 31 M78 56 L68 59 L72 69 M22 56 L32 59 L28 69 M78 44 L68 41 L72 31" fill="none"/></g>`,
 
-    // World 10: Animals
+    // Animals
     "马": `<path d="M30 84 V60 Q28 40 40 30 L36 16 L48 24 Q66 22 74 40 L80 56 Q82 64 74 64 Q68 64 64 56 L58 50 Q56 66 62 84 Z" fill="${K.brown}"/>
            <path d="M40 30 Q30 40 28 56 L24 50 Q24 36 36 26 Z" fill="${K.hair}"/><circle cx="58" cy="36" r="3" fill="${K.ink}"/><circle cx="74" cy="56" r="2" fill="${K.hair}"/>`,
     "鸟": `<ellipse cx="48" cy="54" rx="26" ry="22" fill="${K.blue}"/><circle cx="62" cy="38" r="14" fill="${K.blue}"/>
@@ -221,12 +221,10 @@
            <ellipse cx="50" cy="59" rx="5" ry="3.5" fill="${K.ink}"/><circle cx="41" cy="46" r="3" fill="${K.ink}"/><circle cx="59" cy="46" r="3" fill="${K.ink}"/>
            <path d="M50 70 Q50 76 55 75" fill="${K.pink}"/>`,
 
-    // World 11: Garden and food
+    // Garden and food
     "瓜": `<path d="M14 40 H86 Q86 80 50 80 Q14 80 14 40 Z" fill="${K.green}"/><path d="M20 40 H80 Q80 74 50 74 Q20 74 20 40 Z" fill="${K.red}"/>
            <g fill="${K.ink}"><ellipse cx="38" cy="52" rx="2" ry="3"/><ellipse cx="50" cy="58" rx="2" ry="3"/><ellipse cx="62" cy="52" rx="2" ry="3"/><ellipse cx="44" cy="64" rx="2" ry="3"/><ellipse cx="56" cy="64" rx="2" ry="3"/></g>`,
-    "禾": `<path d="M50 86 V30 Q50 18 62 16" stroke="${K.deep}" stroke-width="4" fill="none" stroke-linecap="round"/>
-           <path d="M50 60 Q36 54 30 44 Q42 46 50 56 M50 66 Q64 60 70 50 Q58 52 50 62" fill="${K.green}" stroke="${K.green}" stroke-width="3"/>
-           <g fill="${K.yellow}"><ellipse cx="64" cy="20" rx="4" ry="6"/><ellipse cx="70" cy="28" rx="4" ry="6"/><ellipse cx="72" cy="38" rx="4" ry="6"/><ellipse cx="58" cy="26" rx="3.5" ry="5"/></g>`,
+    "禾": `<path d="M10 74 Q50 66 90 74 V86 H10 Z" fill="${K.soil}"/><path d="M26 74 V54" stroke="${K.deep}" stroke-width="3.5" stroke-linecap="round"/><path d="M26 60 Q12 58 10 44 Q22 46 26 60 Z M26 56 Q40 52 42 38 Q30 40 26 56 Z" fill="${K.green}"/><path d="M50 74 V54" stroke="${K.deep}" stroke-width="3.5" stroke-linecap="round"/><path d="M50 60 Q36 58 34 44 Q46 46 50 60 Z M50 56 Q64 52 66 38 Q54 40 50 56 Z" fill="${K.green}"/><path d="M74 74 V54" stroke="${K.deep}" stroke-width="3.5" stroke-linecap="round"/><path d="M74 60 Q60 58 58 44 Q70 46 74 60 Z M74 56 Q88 52 90 38 Q78 40 74 56 Z" fill="${K.green}"/>`,
     "米": `<path d="M16 50 H84 Q82 82 50 82 Q18 82 16 50 Z" fill="${K.blue}"/><path d="M22 50 Q30 34 50 34 Q70 34 78 50 Z" fill="${K.white}" stroke="#e9eef3" stroke-width="2"/>
            <path d="M66 14 L44 44 M76 18 L52 46" stroke="${K.wood}" stroke-width="4" stroke-linecap="round"/><rect x="40" y="62" width="20" height="6" rx="3" fill="${K.navy}"/>`,
     "竹": `<g fill="${K.green}"><rect x="30" y="16" width="12" height="70" rx="5"/><rect x="56" y="22" width="12" height="64" rx="5"/></g>
@@ -239,7 +237,7 @@
            <path d="M50 32 Q50 22 54 14" stroke="${K.brown}" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M54 20 Q64 10 74 16 Q64 26 54 20 Z" fill="${K.green}"/>
            <ellipse cx="34" cy="46" rx="5" ry="8" fill="#ff9a9a" transform="rotate(20 34 46)"/>`,
 
-    // World 12: Family
+    // Family
     "子": bust(50, 46, 1.6, { hairStyle: "baby", shirt: K.yellow }),
     "妈": `${bust(38, 40, 1.15, { hairStyle: "long", shirt: K.pink })}${bust(66, 58, 0.85, { hairStyle: "pigtails", shirt: K.yellow })}`,
     "弟": bust(50, 52, 1.25, { hairStyle: "short", shirt: K.green }),
@@ -247,16 +245,18 @@
     "姐": bust(50, 42, 1.6, { hairStyle: "pony", shirt: K.purple }),
     "妹": bust(50, 52, 1.25, { hairStyle: "pigtails", shirt: K.orange }),
 
-    // World 13: Put together
+    // Put together
     "休": `${tree(64, 40, 0.75)}${person(36, 84, 0.85, { pose: "sit", shirt: K.orange })}<path d="M14 84 H86" stroke="${K.green}" stroke-width="5" stroke-linecap="round"/>`,
     "众": `${person(50, 52, 0.62, { shirt: K.blue })}${person(32, 86, 0.62, { shirt: K.pink })}${person(68, 86, 0.62, { shirt: K.green })}`,
-    "男": `${field(50, 32, 0.6)}${person(50, 88, 0.72, { pose: "wide", shirt: K.navy })}`,
+    "男": `${bust(50, 54, 1.25, { hairStyle: "short", shirt: K.navy })}<path d="M30 44 Q30 25 50 25 Q70 25 70 44 Z" fill="${K.orange}"/><path d="M62 43 H84 Q82 49 64 48 Z" fill="${K.rust}"/>`,
     "林": `${tree(32, 52, 0.62)}${tree(68, 52, 0.62, K.hill)}`,
     "森": `${pine(50, 36, 0.85)}${pine(30, 66, 0.85)}${pine(70, 66, 0.85)}`,
 
-    // World 14: Her world
+    // Her world
     "文": `<rect x="24" y="18" width="52" height="66" rx="5" fill="${K.cream}"/><rect x="18" y="14" width="64" height="8" rx="4" fill="${K.wood}"/><rect x="18" y="80" width="64" height="8" rx="4" fill="${K.wood}"/>
-           <path d="M32 34 H68 M32 44 H68 M32 54 H60 M32 64 H66" stroke="${K.brown}" stroke-width="3" stroke-linecap="round" opacity=".55"/>`,
+           <text x="50" y="49" font-size="24" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Noto Sans SC, sans-serif" font-weight="700" fill="${K.ink}">中</text>
+           <text x="50" y="74" font-size="24" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Noto Sans SC, sans-serif" font-weight="700" fill="${K.ink}">文</text>
+           <rect x="64" y="66" width="8" height="8" rx="1.5" fill="${K.red}"/>`,
     "字": `<rect x="18" y="20" width="50" height="62" rx="5" fill="${K.white}" stroke="${K.mist}" stroke-width="2"/>
            <path d="M28 36 H58 M43 36 V50 M28 50 H58 M36 62 Q44 58 52 66" stroke="${K.ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
            <g transform="rotate(35 70 54)"><rect x="64" y="20" width="12" height="46" rx="2" fill="${K.yellow}"/><path d="M64 66 L70 78 L76 66 Z" fill="${K.cream}"/><path d="M68.5 75 L70 78 L71.5 75 Z" fill="${K.ink}"/><rect x="64" y="16" width="12" height="6" rx="2" fill="${K.pink}"/></g>`,
@@ -270,7 +270,7 @@
            <circle cx="40" cy="38" r="5" fill="#eaf59a"/>`,
   };
 
-  // ---------- Sea creatures: one joins her ocean for each world she finishes ----------
+  // ---------- Sea creatures: one joins a category's tank for each of its characters with a 3-star turn ----------
   const CREATURES = {
     fish: `<path d="M70 50 L88 36 L88 64 Z" fill="${K.rust}"/><ellipse cx="46" cy="50" rx="28" ry="20" fill="${K.orange}"/>
            <path d="M40 31 Q46 50 40 69 M56 33 Q62 50 56 67" stroke="${K.white}" stroke-width="6" fill="none"/><circle cx="30" cy="46" r="4.5" fill="${K.ink}"/>`,
