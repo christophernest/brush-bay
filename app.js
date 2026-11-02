@@ -250,9 +250,31 @@
   // ---------- The fish tank: one creature for each character in this category with a 3-star turn ----------
   let swimmers = [];
   const FACES_RIGHT = new Set(["seal", "seahorse"]);  // the rest are drawn facing left
-  const SIZE_SCALE = { orca: 4.4, stingray: 1.7 };  // a killer whale swims much bigger than the fish; a ray is thin side to side (never wider than 45% of the screen)
+  // Some creatures swim bigger than the fish: a killer whale much bigger, a ray a little (it's thin side to side),
+  // and whales bigger still, from babies to adults ([smallest, largest]). None is wider than 60% of the screen.
+  const SIZE_SCALE = { orca: 4.4, stingray: 1.7, whale: [2.1, 6] };
+  const sizeScale = (name) => { const s = SIZE_SCALE[name] || 1; return Array.isArray(s) ? s[0] + Math.random() * (s[1] - s[0]) : s; };
+  // Whales let a few small bubbles out of the blowhole now and then. Where it is in the 100 × 100 drawing (facing left):
+  const BLOWHOLE = { whale: [25, 41] };
+  function puff(f) {
+    if (!f.el.isConnected) return;  // the tank was emptied
+    const r = f.el.getBoundingClientRect(), [bx, by] = BLOWHOLE[f.name];
+    const x = r.left + r.width * (f.el.classList.contains("flip") ? 100 - bx : bx) / 100;
+    const y = r.top + r.height * by / 100;
+    const n = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < n; i++) {
+      const b = document.createElement("span");
+      const d = Math.max(6, Math.min(16, f.size / 22)) * (0.7 + Math.random() * 0.6);
+      b.className = "puff";
+      b.style.cssText = `left:${x}px;top:${y}px;width:${d}px;height:${d}px;animation-delay:${i * 0.22}s;` +
+        `--drift:${Math.round(Math.random() * 16 - 8)}px;--rise:${Math.round(40 + Math.random() * 50 + f.size / 8)}px`;
+      b.addEventListener("animationend", () => b.remove());
+      $("aquarium").appendChild(b);
+    }
+    f.puffTimer = setTimeout(() => puff(f), 3000 + Math.random() * 8000);
+  }
   function emptyAquarium() {
-    swimmers.forEach((f) => clearTimeout(f.timer));
+    swimmers.forEach((f) => { clearTimeout(f.timer); clearTimeout(f.puffTimer); });
     swimmers = [];
     $("aquarium").innerHTML = "";
   }
@@ -274,7 +296,7 @@
     if (!here) return;
     for (let i = 0; i < Math.min(fishIn(here), MAX_SWIMMERS); i++) {
       const el = document.createElement("div");
-      const size = Math.round(Math.min((56 + Math.random() * 28) * (SIZE_SCALE[here.creature] || 1), innerWidth * 0.45));
+      const size = Math.round(Math.min((56 + Math.random() * 28) * sizeScale(here.creature), innerWidth * 0.6));
       el.className = "swimmer";
       el.style.width = el.style.height = size + "px";
       el.innerHTML = `<div class="body">${CREATURE_SVG(here.creature)}</div>`;
@@ -283,6 +305,7 @@
       el.style.transform = `translate(${f.x}px, ${f.y}px)`;
       swimmers.push(f);
       f.timer = setTimeout(() => swimTo(f), 200 + Math.random() * 800);
+      if (BLOWHOLE[f.name]) f.puffTimer = setTimeout(() => puff(f), 1000 + Math.random() * 6000);
     }
   }
 

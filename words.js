@@ -117,18 +117,23 @@ window.WORLDS = [
  },
  {
   "id": 7,
-  "name": "Garden and food",
-  "zh": "花园",
+  "name": "Family",
+  "zh": "家人",
   "creature": "stingray",
-  "scene": "garden",
+  "scene": "sunset",
   "chars": [
-   "禾",
-   "米",
-   "竹",
-   "瓜",
-   "豆",
-   "花",
-   "果"
+   "女",
+   "子",
+   "好",
+   "妈",
+   "爸",
+   "我",
+   "姐",
+   "妹",
+   "弟",
+   "男",
+   "家",
+   "爱"
   ]
  },
  {
@@ -172,23 +177,18 @@ window.WORLDS = [
  },
  {
   "id": 10,
-  "name": "Family",
-  "zh": "家人",
+  "name": "Garden and food",
+  "zh": "花园",
   "creature": "whale",
-  "scene": "sunset",
+  "scene": "garden",
   "chars": [
-   "女",
-   "子",
-   "好",
-   "妈",
-   "爸",
-   "我",
-   "姐",
-   "妹",
-   "弟",
-   "男",
-   "家",
-   "爱"
+   "禾",
+   "米",
+   "竹",
+   "瓜",
+   "豆",
+   "花",
+   "果"
   ]
  }
 ];
@@ -682,59 +682,99 @@ window.WORDS = [
   "world": 6
  },
  {
-  "char": "禾",
-  "pinyin": "hé",
-  "meaning": "rice plant",
-  "strokes": 5,
-  "say": "禾，禾苗",
+  "char": "女",
+  "pinyin": "nǚ",
+  "meaning": "woman, girl",
+  "strokes": 3,
+  "say": "女，女儿",
   "world": 7
  },
  {
-  "char": "米",
-  "pinyin": "mǐ",
-  "meaning": "rice",
+  "char": "子",
+  "pinyin": "zǐ",
+  "meaning": "child",
+  "strokes": 3,
+  "say": "子，孩子",
+  "world": 7
+ },
+ {
+  "char": "好",
+  "pinyin": "hǎo",
+  "meaning": "good",
   "strokes": 6,
-  "say": "米，米饭",
+  "say": "好，你好",
   "world": 7
  },
  {
-  "char": "竹",
-  "pinyin": "zhú",
-  "meaning": "bamboo",
+  "char": "妈",
+  "pinyin": "mā",
+  "meaning": "mum",
   "strokes": 6,
-  "say": "竹，竹子",
+  "say": "妈，妈妈",
   "world": 7
  },
  {
-  "char": "瓜",
-  "pinyin": "guā",
-  "meaning": "melon",
-  "strokes": 5,
-  "say": "瓜，西瓜",
-  "world": 7
- },
- {
-  "char": "豆",
-  "pinyin": "dòu",
-  "meaning": "bean",
-  "strokes": 7,
-  "say": "豆，豆子",
-  "world": 7
- },
- {
-  "char": "花",
-  "pinyin": "huā",
-  "meaning": "flower",
-  "strokes": 7,
-  "say": "花，种花",
-  "world": 7
- },
- {
-  "char": "果",
-  "pinyin": "guǒ",
-  "meaning": "fruit",
+  "char": "爸",
+  "pinyin": "bà",
+  "meaning": "dad",
   "strokes": 8,
-  "say": "果，水果",
+  "say": "爸，爸爸",
+  "world": 7
+ },
+ {
+  "char": "我",
+  "pinyin": "wǒ",
+  "meaning": "I, me",
+  "strokes": 7,
+  "say": "我，我们",
+  "world": 7
+ },
+ {
+  "char": "姐",
+  "pinyin": "jiě",
+  "meaning": "big sister",
+  "strokes": 8,
+  "say": "姐，姐姐",
+  "world": 7
+ },
+ {
+  "char": "妹",
+  "pinyin": "mèi",
+  "meaning": "little sister",
+  "strokes": 8,
+  "say": "妹，妹妹",
+  "world": 7
+ },
+ {
+  "char": "弟",
+  "pinyin": "dì",
+  "meaning": "little brother",
+  "strokes": 7,
+  "say": "弟，弟弟",
+  "world": 7
+ },
+ {
+  "char": "男",
+  "pinyin": "nán",
+  "meaning": "man, boy",
+  "strokes": 7,
+  "say": "男，男孩",
+  "world": 7
+ },
+ {
+  "char": "家",
+  "pinyin": "jiā",
+  "meaning": "home",
+  "strokes": 10,
+  "say": "家，我家",
+  "world": 7
+ },
+ {
+  "char": "爱",
+  "pinyin": "ài",
+  "meaning": "love",
+  "strokes": 10,
+  "say": "爱，可爱",
   "world": 7
  },
  {
@@ -906,99 +946,59 @@ window.WORDS = [
   "world": 9
  },
  {
-  "char": "女",
-  "pinyin": "nǚ",
-  "meaning": "woman, girl",
-  "strokes": 3,
-  "say": "女，女儿",
+  "char": "禾",
+  "pinyin": "hé",
+  "meaning": "rice plant",
+  "strokes": 5,
+  "say": "禾，禾苗",
   "world": 10
  },
  {
-  "char": "子",
-  "pinyin": "zǐ",
-  "meaning": "child",
-  "strokes": 3,
-  "say": "子，孩子",
-  "world": 10
- },
- {
-  "char": "好",
-  "pinyin": "hǎo",
-  "meaning": "good",
+  "char": "米",
+  "pinyin": "mǐ",
+  "meaning": "rice",
   "strokes": 6,
-  "say": "好，你好",
+  "say": "米，米饭",
   "world": 10
  },
  {
-  "char": "妈",
-  "pinyin": "mā",
-  "meaning": "mum",
+  "char": "竹",
+  "pinyin": "zhú",
+  "meaning": "bamboo",
   "strokes": 6,
-  "say": "妈，妈妈",
+  "say": "竹，竹子",
   "world": 10
  },
  {
-  "char": "爸",
-  "pinyin": "bà",
-  "meaning": "dad",
-  "strokes": 8,
-  "say": "爸，爸爸",
+  "char": "瓜",
+  "pinyin": "guā",
+  "meaning": "melon",
+  "strokes": 5,
+  "say": "瓜，西瓜",
   "world": 10
  },
  {
-  "char": "我",
-  "pinyin": "wǒ",
-  "meaning": "I, me",
+  "char": "豆",
+  "pinyin": "dòu",
+  "meaning": "bean",
   "strokes": 7,
-  "say": "我，我们",
+  "say": "豆，豆子",
   "world": 10
  },
  {
-  "char": "姐",
-  "pinyin": "jiě",
-  "meaning": "big sister",
-  "strokes": 8,
-  "say": "姐，姐姐",
-  "world": 10
- },
- {
-  "char": "妹",
-  "pinyin": "mèi",
-  "meaning": "little sister",
-  "strokes": 8,
-  "say": "妹，妹妹",
-  "world": 10
- },
- {
-  "char": "弟",
-  "pinyin": "dì",
-  "meaning": "little brother",
+  "char": "花",
+  "pinyin": "huā",
+  "meaning": "flower",
   "strokes": 7,
-  "say": "弟，弟弟",
+  "say": "花，种花",
   "world": 10
  },
  {
-  "char": "男",
-  "pinyin": "nán",
-  "meaning": "man, boy",
-  "strokes": 7,
-  "say": "男，男孩",
-  "world": 10
- },
- {
-  "char": "家",
-  "pinyin": "jiā",
-  "meaning": "home",
-  "strokes": 10,
-  "say": "家，我家",
-  "world": 10
- },
- {
-  "char": "爱",
-  "pinyin": "ài",
-  "meaning": "love",
-  "strokes": 10,
-  "say": "爱，可爱",
+  "char": "果",
+  "pinyin": "guǒ",
+  "meaning": "fruit",
+  "strokes": 8,
+  "say": "果，水果",
   "world": 10
  }
 ];

@@ -140,6 +140,21 @@ button {
 .swimmer.flip .body { transform: scaleX(-1); }
 .swimmer svg { width: 100%; height: 100%; display: block; }
 @keyframes bob { 50% { translate: 0 -5px; } }
+/* Small bubbles from a whale's blowhole: they rise, drift a little and fade out */
+.puff {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.85);
+  background: rgba(255,255,255,.25);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  animation: puff 2.6s ease-out both;
+}
+@keyframes puff {
+  0% { transform: translate(-50%, -50%) scale(.5); opacity: 0; }
+  15% { opacity: .95; }
+  100% { transform: translate(calc(-50% + var(--drift)), calc(-50% - var(--rise))) scale(1.15); opacity: 0; }
+}
 
 /* Plants and rocks along the sea floor, different for each category */
 #plants { position: fixed; left: 0; right: 0; bottom: 5vh; height: 26vh; z-index: -1; pointer-events: none; }
