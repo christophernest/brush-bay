@@ -81,7 +81,7 @@ window.WORLDS = [
   "id": 5,
   "name": "Sky and weather",
   "zh": "天气",
-  "creature": "dolphin",
+  "creature": "seahorse",
   "scene": "shallows",
   "chars": [
    "天",
@@ -102,7 +102,7 @@ window.WORLDS = [
   "id": 6,
   "name": "Animals",
   "zh": "动物",
-  "creature": "seahorse",
+  "creature": "orca",
   "scene": "seagrass",
   "chars": [
    "马",
@@ -119,7 +119,7 @@ window.WORLDS = [
   "id": 7,
   "name": "Garden and food",
   "zh": "花园",
-  "creature": "shrimp",
+  "creature": "stingray",
   "scene": "garden",
   "chars": [
    "禾",

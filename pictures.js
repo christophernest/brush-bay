@@ -288,16 +288,38 @@
            <ellipse cx="34" cy="34" rx="8" ry="6" fill="${K.leaf}"/><ellipse cx="66" cy="34" rx="8" ry="6" fill="${K.leaf}"/><path d="M78 52 L88 50 L80 56 Z" fill="${K.leaf}"/>
            <ellipse cx="52" cy="52" rx="28" ry="22" fill="${K.hill}"/><path d="M42 38 L52 46 L62 38 M40 62 L52 56 L64 62 M52 46 V56" stroke="${K.deep}" stroke-width="3" fill="none"/>
            <circle cx="19" cy="50" r="2" fill="${K.ink}"/>`,
-    dolphin: `<path d="M14 58 Q30 26 64 30 Q80 32 86 44 Q76 42 70 46 Q74 60 62 70 Q54 64 52 58 Q36 60 26 66 Q30 58 14 58 Z" fill="${K.navy}"/>
-           <path d="M50 30 L46 18 L58 28 Z M60 62 L70 78 L58 70 Z" fill="${K.navy}"/><path d="M30 56 Q48 50 66 50" stroke="${K.sky}" stroke-width="4" fill="none" stroke-linecap="round"/>
-           <circle cx="72" cy="40" r="2.5" fill="${K.ink}"/>`,
-    seahorse: `<path d="M52 18 Q70 18 68 34 Q66 44 58 48 Q70 58 62 72 Q56 82 46 80 Q42 88 50 88" stroke="${K.orange}" stroke-width="12" fill="none" stroke-linecap="round"/>
-           <path d="M54 22 L72 28 L56 32 Z" fill="${K.orange}"/><path d="M60 48 Q72 50 72 40" stroke="${K.rust}" stroke-width="4" fill="none"/><circle cx="58" cy="26" r="2.5" fill="${K.ink}"/>`,
+    // Drawn facing right: a curled tail, a round belly with cream ridges, a crown and a long snout.
+    seahorse: `<path d="M46 66 Q38 82 50 86 Q60 88 60 80 Q60 73 52 75" stroke="${K.orange}" stroke-width="9" fill="none" stroke-linecap="round"/>
+           <path d="M38 47 Q26 52 36 62 Z" fill="${K.rust}"/>
+           <path d="M46 34 Q64 36 64 52 Q64 66 50 70 Q40 72 38 60 Q36 46 46 34 Z" fill="${K.orange}"/>
+           <path d="M50 43 Q57 45 62 42 M47 51 Q56 53 63 50 M46 59 Q54 61 61 58" stroke="${K.cream}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+           <path d="M58 22 L80 25 Q85 28 80 31 L58 33 Z" fill="${K.orange}"/>
+           <circle cx="52" cy="28" r="13" fill="${K.orange}"/>
+           <path d="M44 18 L45 9 L50 15 L54 8 L57 17 Z" fill="${K.rust}"/>
+           <circle cx="55" cy="26" r="4" fill="${K.ink}"/><circle cx="56.5" cy="24.5" r="1.4" fill="${K.white}"/>`,
+    // A killer whale, facing left, drawn from measurements of Ernest's reference picture: a long body with a
+    // pointed snout, a lighter grey back, a swept-back fin just behind the flipper, and white patches (chin,
+    // behind the eye, and under the back half) cut to the body's outline.
+    orca: `<defs><clipPath id="orca-body"><path d="M1.5 61.2 C2.6 59.8 5.6 55 8 52.6 C10.4 50.2 13 48.6 16 47.1 C19 45.6 22.7 44.5 26 43.7 C29.3 42.9 32.3 42.7 36 42.5 C39.7 42.3 44.3 42.2 48 42.4 C51.7 42.6 54.7 42.9 58 43.6 C61.3 44.3 64.7 45.5 68 46.8 C71.3 48.1 74.7 49.6 78 51.4 C81.3 53.2 85.7 56.4 88 57.6 C90.3 58.9 90.8 58.7 92 58.9 C93.2 59.1 93.9 58.6 95 58.7 C96.1 58.8 97.9 59.5 98.5 59.6 C98.2 60 97.1 61 96.6 61.8 C96.1 62.6 95.6 63.5 95.6 64.4 C95.6 65.3 95.9 65.9 96.4 67.4 C96.9 68.9 98.2 72.2 98.6 73.2 C98 72.9 96.1 72.1 95 71.3 C93.9 70.5 92.8 69.5 92 68.5 C91.2 67.5 90.7 66 90 65.3 C89.3 64.5 88.3 64.2 88 64 C87.3 63.8 85.7 63.1 84 62.7 C82.3 62.3 80 61.9 78 61.6 C76 61.4 74.3 61.2 72 61.2 C69.7 61.2 66.7 61.4 64 61.8 C61.3 62.2 58.7 63.1 56 63.6 C53.3 64.1 51 64.5 48 64.8 C45 65.1 41.3 65.2 38 65.3 C34.7 65.4 31.3 65.4 28 65.3 C24.7 65.2 21 65.1 18 64.9 C15 64.7 12.3 64.5 10 64.2 C7.7 63.9 5.4 63.5 4 63 C2.6 62.5 1.9 61.5 1.5 61.2 Z"/></clipPath></defs>
+           <path d="M1.5 61.2 C2.6 59.8 5.6 55 8 52.6 C10.4 50.2 13 48.6 16 47.1 C19 45.6 22.7 44.5 26 43.7 C29.3 42.9 32.3 42.7 36 42.5 C39.7 42.3 44.3 42.2 48 42.4 C51.7 42.6 54.7 42.9 58 43.6 C61.3 44.3 64.7 45.5 68 46.8 C71.3 48.1 74.7 49.6 78 51.4 C81.3 53.2 85.7 56.4 88 57.6 C90.3 58.9 90.8 58.7 92 58.9 C93.2 59.1 93.9 58.6 95 58.7 C96.1 58.8 97.9 59.5 98.5 59.6 C98.2 60 97.1 61 96.6 61.8 C96.1 62.6 95.6 63.5 95.6 64.4 C95.6 65.3 95.9 65.9 96.4 67.4 C96.9 68.9 98.2 72.2 98.6 73.2 C98 72.9 96.1 72.1 95 71.3 C93.9 70.5 92.8 69.5 92 68.5 C91.2 67.5 90.7 66 90 65.3 C89.3 64.5 88.3 64.2 88 64 C87.3 63.8 85.7 63.1 84 62.7 C82.3 62.3 80 61.9 78 61.6 C76 61.4 74.3 61.2 72 61.2 C69.7 61.2 66.7 61.4 64 61.8 C61.3 62.2 58.7 63.1 56 63.6 C53.3 64.1 51 64.5 48 64.8 C45 65.1 41.3 65.2 38 65.3 C34.7 65.4 31.3 65.4 28 65.3 C24.7 65.2 21 65.1 18 64.9 C15 64.7 12.3 64.5 10 64.2 C7.7 63.9 5.4 63.5 4 63 C2.6 62.5 1.9 61.5 1.5 61.2 Z" fill="#585060"/>
+           <g clip-path="url(#orca-body)">
+             <path d="M0 61.2 C0.7 60.8 2.3 59.9 4 58.8 C5.7 57.7 7.7 55.8 10 54.5 C12.3 53.2 15 52.1 18 51.1 C21 50.1 24.3 49.1 28 48.5 C31.7 47.9 36 47.6 40 47.6 C44 47.6 48 47.8 52 48.3 C56 48.8 60 49.4 64 50.4 C68 51.4 72.5 53 76 54.3 C79.5 55.6 82.8 57.4 85 58 C87.2 58.6 88.3 58 89 58 L89 0 L0 0 Z" fill="#686068"/>
+             <path d="M0 61.6 C1 61.5 3.7 61.4 6 61.2 C8.3 61 11.7 60.5 14 60.3 C16.3 60.1 18.2 59.8 20 59.9 C21.8 60 23.4 60.1 25 60.6 C26.6 61.1 28.8 62.6 29.6 63 L29.6 72 L0 72 Z" fill="#f0e8e0"/>
+           </g>
+           <path d="M46.8 64.9 C47.3 64.4 48.8 63 50 62.1 C51.2 61.2 52.7 60.2 54 59.5 C55.3 58.8 56.7 58.2 58 57.7 C59.3 57.2 60.7 56.9 62 56.7 C63.3 56.5 64.8 56.3 66 56.4 C67.2 56.5 68.6 56.8 69.5 57.1 C70.4 57.4 71.7 57.6 71.4 58 C71.2 58.4 69.2 59 68 59.5 C66.8 60 65.3 60.3 64 60.8 C62.7 61.3 61.7 62.1 60 62.6 C58.3 63.1 56 63.7 54 64.1 C52 64.5 49.2 64.9 48 65 C46.8 65.1 47 64.9 46.8 64.9 Z" fill="#f0e8e0"/>
+           <path d="M17.2 55.5 C17.7 55.1 18.9 53.8 20 53.2 C21.1 52.6 22.7 52.2 24 51.9 C25.3 51.6 27.2 51.5 28 51.5 C28.8 51.5 29.2 51.6 28.9 52.1 C28.6 52.6 27.1 53.9 26 54.6 C24.9 55.3 23.2 56.2 22 56.5 C20.8 56.8 19.3 56.7 18.5 56.5 C17.7 56.3 17.4 55.7 17.2 55.5 Z" fill="#f0e8e0"/>
+           <path d="M35 42.8 C35.8 42.2 38.5 41.1 40 39.2 C41.5 37.4 42.7 33.8 44 31.7 C45.3 29.6 46.7 27.6 48 26.5 C49.3 25.4 50.8 25.2 51.6 25.1 C52.4 25 52.9 25.3 53 26 C53.1 26.7 52.4 28.2 52 29.5 C51.6 30.8 50.6 32.5 50.4 34 C50.2 35.5 50.2 37.2 50.6 38.5 C51 39.8 51.9 40.7 53 41.6 C54.1 42.5 56.3 43.6 57 44 Z" fill="#686068"/>
+           <path d="M29.3 60.5 C29.5 61.4 29.7 64 30.5 65.6 C31.3 67.1 32.8 68.6 34 69.8 C35.2 71 36.9 72.2 38 73 C39.1 73.8 40 74.8 40.6 74.9 C41.2 75 41.6 74.8 41.7 73.6 C41.8 72.4 41.5 69.9 41.4 68 C41.3 66.1 41.6 63.4 41 62.2 C40.4 61 38.5 60.9 38 60.6 Z" fill="#686068"/>`,
+    // A grey stingray seen from above, swimming left with its tail out behind; the face stays upright.
+    stingray: `<g transform="rotate(-90 50 50)"><path d="M45 50 Q49 74 50 94 Q52 74 55 50 Z" fill="${K.slate}"/>
+           <path d="M50 14 C 66 18, 86 30, 94 42 C 83 48, 64 54, 50 62 C 36 54, 17 48, 6 42 C 14 30, 34 18, 50 14 Z" fill="${K.slate}"/>
+           <path d="M50 20 C 62 24, 74 33, 78 40 C 68 44, 58 48, 50 54 C 42 48, 32 44, 22 40 C 26 33, 38 24, 50 20 Z" fill="${K.grey}"/>
+           <circle cx="28" cy="40" r="2" fill="${K.mist}"/><circle cx="72" cy="40" r="2" fill="${K.mist}"/><circle cx="34" cy="46" r="1.5" fill="${K.mist}"/><circle cx="66" cy="46" r="1.5" fill="${K.mist}"/></g>
+           <circle cx="27" cy="45" r="4.2" fill="${K.white}"/><circle cx="38" cy="45" r="4.2" fill="${K.white}"/>
+           <circle cx="26" cy="46" r="2.2" fill="${K.ink}"/><circle cx="37" cy="46" r="2.2" fill="${K.ink}"/>
+           <path d="M28 53 Q32.5 57 37 53" stroke="${K.ink}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`,
     shell: `<path d="M50 18 L18 70 Q50 86 82 70 Z" fill="${K.blush}"/><path d="M50 18 L32 74 M50 18 L50 78 M50 18 L68 74" stroke="${K.pink}" stroke-width="4" stroke-linecap="round"/>
            <rect x="40" y="70" width="20" height="10" rx="4" fill="${K.pink}"/>`,
-    shrimp: `<path d="M74 30 Q86 50 74 66 Q62 80 44 76 Q30 72 28 60" stroke="${K.rust}" stroke-width="16" fill="none" stroke-linecap="round"/>
-           <path d="M28 60 L18 54 L22 66 Z" fill="${K.rust}"/><path d="M72 28 Q56 16 40 22 M74 30 Q60 26 48 32" stroke="${K.orange}" stroke-width="2.5" fill="none"/>
-           <path d="M64 62 l4 8 M54 66 l2 9 M44 66 l0 9" stroke="${K.orange}" stroke-width="3" stroke-linecap="round"/><circle cx="74" cy="34" r="2.5" fill="${K.ink}"/>`,
     jelly: `<path d="M22 48 Q22 20 50 20 Q78 20 78 48 Q70 44 64 48 Q57 44 50 48 Q43 44 36 48 Q29 44 22 48 Z" fill="${K.lilac}"/>
            <path d="M32 50 Q28 64 34 74 M44 50 Q40 66 46 82 M56 50 Q60 66 54 82 M68 50 Q72 64 66 74" stroke="${K.purple}" stroke-width="4" fill="none" stroke-linecap="round"/>
            <ellipse cx="40" cy="32" rx="6" ry="4" fill="${K.white}" opacity=".7"/>`,

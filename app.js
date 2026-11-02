@@ -249,7 +249,8 @@
 
   // ---------- The fish tank: one creature for each character in this category with a 3-star turn ----------
   let swimmers = [];
-  const FACES_RIGHT = new Set(["dolphin", "shrimp", "seal", "seahorse"]);  // the rest are drawn facing left
+  const FACES_RIGHT = new Set(["seal", "seahorse"]);  // the rest are drawn facing left
+  const SIZE_SCALE = { orca: 4.4, stingray: 1.7 };  // a killer whale swims much bigger than the fish; a ray is thin side to side (never wider than 45% of the screen)
   function emptyAquarium() {
     swimmers.forEach((f) => clearTimeout(f.timer));
     swimmers = [];
@@ -273,7 +274,7 @@
     if (!here) return;
     for (let i = 0; i < Math.min(fishIn(here), MAX_SWIMMERS); i++) {
       const el = document.createElement("div");
-      const size = 56 + Math.round(Math.random() * 28);
+      const size = Math.round(Math.min((56 + Math.random() * 28) * (SIZE_SCALE[here.creature] || 1), innerWidth * 0.45));
       el.className = "swimmer";
       el.style.width = el.style.height = size + "px";
       el.innerHTML = `<div class="body">${CREATURE_SVG(here.creature)}</div>`;
