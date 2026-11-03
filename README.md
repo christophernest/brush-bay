@@ -4,8 +4,9 @@ A small web app for young children to practise writing Chinese characters with a
 
 - 101 simplified characters in 10 categories, each with its own sea scene and fish tank
 - Each stroke is shown in order and direction over a soft outline, then checked as the child writes it
+- Practice mode: any character with 3 stars, written 11 times with less help each time, ending in free writing that is still checked stroke by stroke; finishing wins a trophy
 - Works offline after the first visit, and can be added to an iPad or iPhone home screen (Safari → Share → Add to Home Screen)
-- Progress is saved only on the device. Nothing is sent anywhere, and there's no tracking
+- Progress, trophies and handwriting are saved only on the device. Nothing is sent anywhere, and there's no tracking
 
 ## Credits and licences
 

@@ -28,7 +28,7 @@
     </header>
     <div id="cats" class="cats"></div>
     <nav class="home-nav">
-      <button id="open-book" class="round big" aria-label="Sticker book"><span data-icon="book"></span></button>
+      <button id="open-practice" class="round big" aria-label="Practice"><span data-icon="pencil"></span></button>
       <button id="music" class="round small" aria-label="Music"></button>
       <button id="open-parent" class="round small hold" aria-label="Parent corner (hold for 3 seconds)"><span data-icon="gear"></span><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/></svg></button>
     </nav>
@@ -47,14 +47,26 @@
     </footer>
   </main>
 
-  <!-- Practice: one character at a time -->
+  <!-- Practice mode: pick any character with at least one star -->
+  <main id="pick" class="screen" hidden>
+    <header class="bar">
+      <button id="pick-home" class="round" aria-label="Back to the sea"><span data-icon="home"></span></button>
+      <h2 class="world-title"><span lang="zh-CN">练习</span><small>Practice</small></h2>
+      <span class="spacer"></span>
+    </header>
+    <div id="pick-words" class="words pick-words"></div>
+  </main>
+
+  <!-- Writing: one character at a time -->
   <main id="practice" class="screen" hidden>
     <header class="bar">
       <button id="go-home" class="round" aria-label="Back to this sea"><span data-icon="home"></span></button>
+      <div id="rounds" class="rounds" hidden></div>
       <button id="say" class="round big" aria-label="Hear the word again"><span data-icon="speaker"></span></button>
     </header>
     <section class="stage">
       <div class="card">
+        <button id="card-trophy" class="trophy-btn" aria-label="See the handwriting" hidden></button>
         <div id="picture" class="picture"></div>
         <div id="card-char" class="card-char" lang="zh-CN"></div>
         <div id="pinyin" class="pinyin"></div>
@@ -78,16 +90,6 @@
       <button id="done-home" class="round" aria-label="Back to this sea"><span data-icon="home"></span></button>
       <button id="done-next" class="pill go" aria-label="Keep going"><span data-icon="next"></span></button>
     </div>
-  </main>
-
-  <!-- Sticker book -->
-  <main id="book" class="screen" hidden>
-    <header class="bar">
-      <button id="book-home" class="round" aria-label="Back to the sea"><span data-icon="home"></span></button>
-      <h2 class="book-title"><span data-icon="book"></span></h2>
-      <span class="spacer"></span>
-    </header>
-    <div id="stickers" class="stickers"></div>
   </main>
 
   <!-- Parent corner -->
@@ -125,10 +127,20 @@
     </div>
   </main>
 
+  <!-- Her latest free-written character, opened from its trophy -->
+  <div id="capture" class="capture" hidden>
+    <div class="capture-card" role="dialog" aria-label="Her handwriting">
+      <button id="capture-close" class="round small" aria-label="Close"><span data-icon="close"></span></button>
+      <div id="capture-art" class="capture-art"></div>
+      <div id="capture-note" class="capture-note"></div>
+    </div>
+  </div>
+
   <script src="vendor/hanzi-writer.min.js"></script>
   <script src="words.js"></script>
   <script src="characters.js"></script>
   <script src="pictures.js"></script>
+  <script src="freewrite.js"></script>
   <script src="music.js"></script>
   <script src="app.js"></script>
 </body>

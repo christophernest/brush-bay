@@ -9,12 +9,16 @@
 
   // ---------- Saved progress (only on this device) ----------
   const STORE_KEY = "stroke-sea-v1";
-  const blank = () => ({ chars: {}, settings: { pinyin: false, strict: false, unlock: false, music: true } });
+  // practice: characters finished in practice mode, with her latest free-written version (see Practice mode below)
+  // opened: ids of the categories that have opened, so they stay open when new words raise the stars needed
+  const blank = () => ({ chars: {}, practice: {}, opened: [], settings: { pinyin: false, strict: false, unlock: false, music: true } });
   let progress = blank();
   try {
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
     if (saved && saved.chars) progress = { ...blank(), ...saved, settings: { ...blank().settings, ...saved.settings } };
     // Progress saved by an older version may lack a field (best stars came later): fill in zeros, never NaN.
+    if (!progress.practice || typeof progress.practice !== "object") progress.practice = {};
+    if (!Array.isArray(progress.opened)) progress.opened = [];
     for (const [c, s] of Object.entries(progress.chars)) {
       progress.chars[c] = { stage: +s?.stage || 0, tries: +s?.tries || 0, best: +s?.best || 0, last: +s?.last || 0 };
     }
@@ -45,8 +49,13 @@
   const worldDone = (w) => masteredIn(w) === w.chars.length;
   // A category opens once the one before it has two thirds (67%) of its possible stars, e.g. 20 of 30.
   const unlockAt = (w) => 2 * w.chars.length;  // two of the three stars per character, on average
-  const worldUnlocked = (i) =>
-    i === 0 || progress.settings.unlock || (worldUnlocked(i - 1) && worldStars(WORLDS[i - 1]) >= unlockAt(WORLDS[i - 1]));
+  // Once open, a category stays open: it was opened before (saved), or she has played one of its characters, which
+  // covers progress from before "opened" was saved. Adding words to a category never locks the next one again.
+  const worldUnlocked = (i) => {
+    const w = WORLDS[i];
+    if (i === 0 || progress.settings.unlock || progress.opened.includes(w.id) || w.chars.some((c) => progress.chars[c])) return true;
+    return worldUnlocked(i - 1) && worldStars(WORLDS[i - 1]) >= unlockAt(WORLDS[i - 1]);
+  };
   const starRow = (n) => [1, 2, 3].map((k) => `<i class="${k <= n ? "on" : ""}">${STAR_SVG}</i>`).join("");
 
   // ---------- Sound ----------
@@ -225,10 +234,11 @@
   }
 
   // ---------- Screens ----------
-  const screens = ["home", "world", "practice", "done", "book", "parent"];
+  const screens = ["home", "world", "pick", "practice", "done", "parent"];
   let here = null;  // the category she's in, or null on the home page
   function show(id) {
     screens.forEach((s) => ($(s).hidden = s !== id));
+    $("capture").hidden = true;
     if (id !== "practice") { clearPads(); stopVoice(); }
     // A category's creatures swim on its page and its end screen, never while she's writing.
     if (id === "world" || id === "done") fillAquarium(); else emptyAquarium();
@@ -318,6 +328,7 @@
     WORLDS.forEach((w, i) => {
       const b = document.createElement("button");
       const unlocked = worldUnlocked(i);
+      if (unlocked && !progress.settings.unlock && !progress.opened.includes(w.id)) { progress.opened.push(w.id); save(); }
       const stars = worldStars(w);
       const sc = SCENE(w.scene);
       b.className = "cat" + (unlocked ? "" : " locked");
@@ -372,7 +383,7 @@
   function startWorld(world, from) {
     from = from || world.chars.find((c) => bestOf(c) < 3) || world.chars[0];
     const items = world.chars.slice(world.chars.indexOf(from)).map((c) => ({ char: c, review: stageOf(c) >= MASTERED }));
-    session = { world, items, i: 0, stars: [], mastered: [], newFish: 0, gained: 0, wasDone: worldDone(world), turnDone: false };
+    session = { mode: "play", world, items, i: 0, stars: [], mastered: [], newFish: 0, gained: 0, wasDone: worldDone(world), turnDone: false };
     show("practice");
     showItem();
   }
@@ -461,7 +472,10 @@
   }
 
   function lesson() {
+    if (session.mode === "practice") { practiceRound(); return; }
     clearPads();
+    $("rounds").hidden = true;
+    $("card-trophy").hidden = true;
     const { word, quizStage } = current();
     const cfg = STAGES[quizStage];
     const pad = makePad();
@@ -517,6 +531,7 @@
   }
 
   function finish(mistakes, pad) {
+    if (session.mode === "practice") { finishRound(mistakes, pad); return; }
     const { item, word, quizStage } = current();
     const stars = mistakes === 0 ? 3 : mistakes <= 3 ? 2 : 1;
     const cs = charState(item.char);
@@ -562,13 +577,14 @@
 
   function showDone() {
     const s = session;
+    if (s.mode === "practice") { showPracticeDone(); return; }
     $("done-guide").innerHTML = stingray();
     restartAnim($("done-guide"), "happy");
     $("done-stars").innerHTML = STAR_SVG.repeat(s.gained);  // new stars only
     // The category's stars so far, so the screen is never empty after a turn with no new stars.
     $("done-total").innerHTML = `<i class="on">${STAR_SVG}</i><b>${worldStars(s.world)}</b> / ${3 * s.world.chars.length}`;
-    // New stickers for characters mastered, and the creatures won with 3-star turns.
-    let html = s.mastered.length ? `<span class="new-stickers" lang="zh-CN">${ICON("book")} ${s.mastered.join(" ")}</span>` : "";
+    // Characters mastered (each in a gold ring, as on its word bubble), and the creatures won with 3-star turns.
+    let html = s.mastered.length ? `<span class="new-mastered" lang="zh-CN">${s.mastered.map((c) => `<b>${c}</b>`).join("")}</span>` : "";
     if (s.newFish) {
       html += `<span class="creatures-new">${Array(s.newFish).fill(`<span class="creature">${CREATURE_SVG(s.world.creature)}</span>`).join("")}</span>`;
     }
@@ -578,27 +594,250 @@
     bubbles(24);
   }
 
-  // ---------- Sticker book ----------
-  function renderBook() {
-    // Every character's sticker, by category: faded until it's mastered, then in full colour.
-    $("stickers").innerHTML = "";
+  // ---------- Practice mode: one character written 11 times, with less help each time ----------
+  // Any character with 3 stars can be practised. Practice never changes stars, steps or fish; finishing all 11 rounds
+  // wins the character a trophy, and her latest free-written version is kept with it (only on this device).
+  const practiceable = (c) => bestOf(c) === 3;
+  const hasTrophy = (c) => !!progress.practice[c];
+  const PRACTICE_ROUNDS = 11;
+  // Rounds 1-6: the help fades. Rounds 7-10: no outline and no hints. Round 11: free writing (see freeWrite).
+  // outline: the grey outline's colour (fainter and fainter, then none); demo: the whole character is shown first;
+  // guided: each next stroke lights up; flash: only the first stroke lights up, once; hints: misses before a hint.
+  const ROUNDS = {
+    1: { outline: "#d8cde4", demo: true, guided: true, hints: 1 },
+    2: { outline: "#d8cde4", guided: true, hints: 1 },
+    3: { outline: "#d8cde4", hints: 1 },
+    4: { outline: "#e8e1f0", hints: 1 },
+    5: { outline: "#f3eff7", hints: 2 },
+    6: { outline: null, flash: true, hints: 3 },
+    7: { outline: null, hints: false }, 8: { outline: null, hints: false },
+    9: { outline: null, hints: false }, 10: { outline: null, hints: false },
+  };
+
+  function renderPick() {
+    here = null;
+    setScene("home");
+    const box = $("pick-words");
+    box.innerHTML = "";
+    let any = false;
     WORLDS.forEach((world) => {
+      const chars = world.chars.filter(practiceable);
+      if (!chars.length) return;
+      any = true;
       const h = document.createElement("h3");
-      h.className = "sticker-group";
+      h.className = "group-head";
       h.innerHTML = `<span lang="zh-CN">${world.zh}</span> <small>${world.name}</small>`;
-      $("stickers").appendChild(h);
-      world.chars.forEach((c) => {
-        const w = WORD[c];
+      box.appendChild(h);
+      chars.forEach((c) => {
         const b = document.createElement("button");
-        const got = stageOf(c) >= MASTERED;
-        b.className = "sticker" + (got ? "" : " locked");
-        b.innerHTML = `<span class="sticker-pic">${PICTURE_SVG(c)}</span><span class="sticker-char" lang="zh-CN">${c}</span>`;
-        b.setAttribute("aria-label", got ? `${c}, ${w.meaning}` : `${c}, not collected yet`);
-        if (got) b.addEventListener("click", () => { sayWord(w); restartAnim(b, "bounce"); });
-        $("stickers").appendChild(b);
+        // A card with the word's picture and character, in a gold ring like a 3-star bubble.
+        b.className = "pick-card";
+        b.setAttribute("aria-label", `${c}, ${WORD[c].meaning}${hasTrophy(c) ? ", practised: trophy won" : ""}`);
+        b.innerHTML = `<span class="pick-pic">${PICTURE_SVG(c)}</span><span class="pick-char" lang="zh-CN">${c}</span>` +
+          (hasTrophy(c) ? `<span class="word-trophy">${TROPHY_SVG}</span>` : "");
+        b.addEventListener("click", () => startPractice(c));
+        box.appendChild(b);
       });
     });
-    show("book");
+    if (!any) box.innerHTML = `<p class="pick-empty"><span class="guide">${stingray()}</span>Get 3 stars on a character, and it can be practised here.</p>`;
+    show("pick");
+  }
+
+  function startPractice(c) {
+    const world = WORLDS.find((w) => w.id === WORD[c].world);
+    session = { mode: "practice", char: c, world, items: [{ char: c, review: true }], i: 0, round: 1, stars: [], turnDone: false };
+    show("practice");
+    const word = WORD[c];
+    $("picture").innerHTML = PICTURE_SVG(c);
+    $("card-char").textContent = c;
+    $("card-meaning").textContent = word.meaning;
+    $("pinyin").textContent = progress.settings.pinyin ? word.pinyin : "";
+    $("pinyin").hidden = !progress.settings.pinyin;
+    sayWord(word);
+    practiceRound();
+  }
+
+  // Dots for the 11 rounds: done ones gold, this one ringed, the last one a pencil (free writing).
+  function showRounds() {
+    $("rounds").hidden = false;
+    $("rounds").innerHTML = Array.from({ length: PRACTICE_ROUNDS }, (_, i) => {
+      const n = i + 1, cls = n < session.round ? "done" : n === session.round ? "now" : "";
+      return n === PRACTICE_ROUNDS ? `<i class="free ${cls}">${ICON("pencil")}</i>` : `<i class="${cls}"></i>`;
+    }).join("");
+    $("rounds").setAttribute("aria-label", `Round ${session.round} of ${PRACTICE_ROUNDS}`);
+  }
+  function showCardTrophy() {
+    const c = session.char;
+    $("card-trophy").hidden = !hasTrophy(c);
+    $("card-trophy").innerHTML = TROPHY_SVG;
+  }
+
+  function practiceRound() {
+    clearPads();
+    session.turnDone = false;
+    showRounds();
+    showCardTrophy();
+    if (session.round === PRACTICE_ROUNDS) { freeWrite(); return; }
+    const cfg = ROUNDS[session.round];
+    const pad = makePad();
+    const w = HanziWriter.create(pad, session.char, writerOptions(padSize(), {
+      showOutline: !!cfg.outline, outlineColor: cfg.outline || "#d8cde4", ...(cfg.guided || cfg.flash ? { strokeHighlightSpeed: 0.8 } : {}),
+    }));
+    writers = [w];
+    const my = token;
+    buttons({ replay: !!cfg.guided });
+    const startGuided = () => {
+      Object.assign(guide, { w, stroke: 0, total: CHAR_DATA[session.char].strokes.length });
+      write(w, pad, cfg, my);
+      setTimeout(() => { if (my === token) showNextStroke(); }, 500);
+    };
+    if (cfg.demo) {
+      buttons({});
+      w.animateCharacter({ onComplete: () => setTimeout(() => {
+        if (my !== token) return;
+        w.hideCharacter();
+        buttons({ replay: true });
+        startGuided();
+      }, 700) });
+    } else if (cfg.guided) {
+      startGuided();
+    } else {
+      write(w, pad, cfg, my);
+      if (cfg.flash) setTimeout(() => { if (my === token) w.highlightStroke(0); }, 500);
+    }
+  }
+
+  // A round's stars are only for fun: practice never changes her stars, steps or fish.
+  function finishRound(mistakes, pad, ink) {
+    const stars = mistakes === 0 ? 3 : mistakes <= 3 ? 2 : 1;
+    session.stars.push(stars);
+    session.turnDone = true;
+    buttons({});
+    pad.classList.add("glow");
+    fanfare();
+    bubbles(8);
+    $("stars").innerHTML = [1, 2, 3].map((n) => `<span class="${n <= stars ? "" : "dim"}">${STAR_SVG}</span>`).join("");
+    const my = token;
+    setTimeout(() => { if (my === token) sayWord(WORD[session.char], "char"); }, 500);
+    if (session.round === PRACTICE_ROUNDS) {
+      progress.practice[session.char] = { at: Date.now(), ink };
+      save();
+    }
+    setTimeout(() => {
+      if (my !== token) return;
+      if (session.round < PRACTICE_ROUNDS) { session.round++; practiceRound(); } else showDone();
+    }, 2200);
+  }
+
+  function showPracticeDone() {
+    const c = session.char;
+    $("done-guide").innerHTML = stingray();
+    restartAnim($("done-guide"), "happy");
+    $("done-stars").innerHTML = "";
+    $("done-total").innerHTML = `<span class="done-char" lang="zh-CN">${c}</span>`;
+    $("done-new").innerHTML = `<button class="done-trophy" aria-label="See the handwriting">${TROPHY_SVG}</button>`;
+    $("done-new").querySelector("button").addEventListener("click", () => openCapture(c));
+    show("done");
+    fanfare();
+    bubbles(24);
+  }
+
+  // Her free-written strokes, kept as points in a 100 × 100 box, drawn back as her handwriting.
+  const inkSvg = (ink) => `<svg viewBox="0 0 100 100" aria-hidden="true">${ink.map((s) =>
+    `<path d="M${s.map((p, i) => (i % 2 ? " " : i ? " L" : "") + p).join("")}"/>`).join("")}</svg>`;
+  function openCapture(c) {
+    const p = progress.practice[c];
+    if (!p) return;
+    $("capture-art").innerHTML = inkSvg(p.ink);
+    const when = new Date(p.at).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+    $("capture-note").innerHTML = `<span lang="zh-CN">${c}</span> ${when}`;
+    $("capture").hidden = false;
+  }
+
+  // ---------- Round 11: free writing ----------
+  // She writes the character at any size and anywhere in the box. Each stroke is still checked: its shape,
+  // direction and order, and (from the second stroke on) where it sits compared with the strokes she has already
+  // written. The first stroke sets her size and position, and every accepted stroke refines it. A wrong stroke is
+  // undone; after 4 misses on one stroke it fills itself in, so she never gets stuck.
+  function freeWrite() {
+    const c = session.char, size = padSize(), my = token;
+    buttons({});
+    const pad = makePad();
+    pad.classList.add("free");
+    const NS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+    svg.setAttribute("width", size);
+    svg.setAttribute("height", size);
+    pad.appendChild(svg);
+    const judge = FreeWriting.judge(c, size, progress.settings.strict);
+    const width = Math.max(8, Math.round(size / 22));
+    const ink = [];
+    let k = 0, misses = 0, mistakes = 0, drawing = null, filling = false;
+
+    const newPath = (cls) => {
+      const p = document.createElementNS(NS, "path");
+      p.setAttribute("class", cls);
+      p.setAttribute("stroke-width", width);
+      svg.appendChild(p);
+      return p;
+    };
+    const setPath = (p, pts) => p.setAttribute("d", "M" + pts.map((q) => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" L"));
+    const local = (e) => { const r = svg.getBoundingClientRect(); return [(e.clientX - r.left) * size / r.width, (e.clientY - r.top) * size / r.height]; };
+
+    function accept(pts, path) {
+      path.setAttribute("class", "ink");
+      judge.add(pts, k);
+      ink.push(pts);
+      chime(k);
+      k++;
+      misses = 0;
+      if (k === judge.strokes) {
+        svg.style.pointerEvents = "none";
+        // Keep her strokes in a 100 × 100 box, every other point, to one decimal place.
+        const kept = ink.map((s) => s.filter((_, i) => i % 2 === 0 || i === s.length - 1).flatMap(([x, y]) => [+(x * 100 / size).toFixed(1), +(y * 100 / size).toFixed(1)]));
+        finishRound(mistakes, pad, kept);
+      }
+    }
+    // After 4 misses: draw the stroke where it belongs, at her size and position so far.
+    function fillIn() {
+      const pts = judge.place(k);
+      const p = newPath("ink");
+      setPath(p, pts);
+      accept(pts, p);
+    }
+    function check(pts, path) {
+      const ok = judge.fits(pts, k);
+      if (ok) { accept(pts, path); return; }
+      mistakes++;
+      misses++;
+      thud();
+      restartAnim(pad, "wobble");
+      path.setAttribute("class", "wrong");
+      setTimeout(() => path.remove(), 450);
+      // No new strokes while the missed one fills itself in.
+      if (misses >= 4) { filling = true; setTimeout(() => { if (my === token) { filling = false; fillIn(); } }, 500); }
+    }
+    svg.addEventListener("pointerdown", (e) => {
+      if (drawing || filling) return;
+      e.preventDefault();
+      svg.setPointerCapture?.(e.pointerId);
+      drawing = { id: e.pointerId, pts: [local(e)], path: newPath("drawing") };
+    });
+    svg.addEventListener("pointermove", (e) => {
+      if (!drawing || e.pointerId !== drawing.id) return;
+      (e.getCoalescedEvents?.() || [e]).forEach((ev) => drawing.pts.push(local(ev)));
+      setPath(drawing.path, drawing.pts);
+    });
+    const end = (e) => {
+      if (!drawing || e.pointerId !== drawing.id) return;
+      const { pts, path } = drawing;
+      drawing = null;
+      if (pts.length < 2 || FreeWriting.pathLength(pts) < size * 0.015) { path.remove(); return; }  // a tap, not a stroke
+      check(pts, path);
+    };
+    svg.addEventListener("pointerup", end);
+    svg.addEventListener("pointercancel", end);
   }
 
   // ---------- Parent corner (hold the gear for 3 seconds) ----------
@@ -639,23 +878,27 @@
   }
 
   // ---------- Wiring ----------
-  $("go-home").addEventListener("click", () => openWorld(here));
+  $("go-home").addEventListener("click", () => (session?.mode === "practice" ? renderPick() : openWorld(here)));
   $("world-home").addEventListener("click", renderHome);
   $("world-play").addEventListener("click", () => startWorld(here));
   $("say").addEventListener("click", () => session && sayWord(current().word));
   // "Again": in guided steps, show the current stroke again; otherwise replay the whole character.
   $("replay").addEventListener("click", () => (guide.w ? showNextStroke() : lesson()));
-  $("done-home").addEventListener("click", () => openWorld(here));
+  $("done-home").addEventListener("click", () => (session?.mode === "practice" ? renderHome() : openWorld(here)));
   // Keep going: the category is finished, so on to the next one if it's open; otherwise this one again.
   $("done-next").addEventListener("click", () => {
+    if (session?.mode === "practice") { renderPick(); return; }
     const i = WORLDS.indexOf(here);
     const next = i + 1 < WORLDS.length && worldUnlocked(i + 1) ? WORLDS[i + 1] : here;
     here = next;
     setScene(next.scene);
     startWorld(next);
   });
-  $("open-book").addEventListener("click", renderBook);
-  $("book-home").addEventListener("click", renderHome);
+  $("open-practice").addEventListener("click", renderPick);
+  $("pick-home").addEventListener("click", renderHome);
+  $("card-trophy").addEventListener("click", () => openCapture(session.char));
+  $("capture-close").addEventListener("click", () => ($("capture").hidden = true));
+  $("capture").addEventListener("click", (e) => { if (e.target === $("capture")) $("capture").hidden = true; });
   $("parent-home").addEventListener("click", renderHome);
   holdToOpen($("open-parent"), 3000, renderParent);
   $("music").addEventListener("click", () => {
@@ -673,7 +916,7 @@
   $("reset").addEventListener("click", () => {
     if (!confirm("Reset all progress? Every character goes back to the start.")) return;
     if (!confirm("Are you sure? This can't be undone.")) return;
-    progress = { ...blank(), settings: progress.settings };
+    progress = { ...blank(), settings: progress.settings };  // trophies and handwriting go too
     save();
     renderParent();
   });

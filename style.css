@@ -93,7 +93,6 @@ button {
 .round.big svg { width: 38px; height: 38px; }
 .pill svg { width: 30px; height: 30px; }
 .pill.small svg { width: 20px; height: 20px; }
-.book-title svg { width: 34px; height: 34px; display: block; }
 .round.small { width: 48px; height: 48px; font-size: 22px; }
 .round:active, .pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.18); }
 
@@ -266,6 +265,7 @@ button {
   gap: 14px;
 }
 .card {
+  position: relative;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
   background: #fff;
   border-radius: 28px;
@@ -300,6 +300,56 @@ button {
 }
 .pad.glow { box-shadow: 0 0 0 6px var(--gold), 0 6px 0 rgba(0,0,0,.15); transition: box-shadow .3s; }
 .pad svg { display: block; }
+
+/* Practice mode: dots for its 11 rounds, trophies, and the free-writing box */
+.rounds { display: flex; align-items: center; gap: clamp(3px, 1vw, 7px); }
+.rounds i { width: clamp(8px, 2.2vw, 14px); aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.45); }
+.rounds i.done { background: var(--gold); }
+.rounds i.now { background: #fff; box-shadow: 0 0 0 3px var(--gold); }
+.rounds i.free { width: clamp(20px, 4.4vw, 28px); display: grid; place-items: center; background: rgba(255,255,255,.45); color: var(--ink); }
+.rounds i.free.now { background: #fff; }
+.rounds i.free svg { width: 70%; height: 70%; }
+/* Practice list cards: the word's picture above its character, sized by the card itself (cqw), in a gold ring */
+.pick-words { grid-template-columns: repeat(auto-fill, minmax(min(140px, 28vw), 1fr)); gap: 16px; padding: 6px 6px 20px; }
+.pick-card {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  border-radius: 22px;
+  background: var(--card);
+  box-shadow: 0 0 0 4px var(--gold), 0 6px 0 rgba(0,0,0,.15);
+  container-type: inline-size;
+  color: var(--ink);
+}
+.pick-pic { position: absolute; left: 21%; right: 21%; top: 6%; aspect-ratio: 1; }
+.pick-pic svg { display: block; width: 100%; height: 100%; }
+.pick-char { position: absolute; left: 0; right: 0; bottom: 5%; height: 27cqw; display: flex; align-items: center; justify-content: center;
+  font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 23cqw; line-height: 1; }
+.word-trophy { position: absolute; top: 3cqw; right: 3cqw; width: 22cqw; height: 22cqw; filter: drop-shadow(0 2px 0 rgba(0,0,0,.2)); }
+.word-trophy svg { width: 100%; height: 100%; display: block; }
+.trophy-btn { position: absolute; top: 6px; right: 6px; width: 52px; height: 52px; padding: 4px; border-radius: 50%; background: #fff8dc; box-shadow: 0 3px 0 rgba(0,0,0,.12); z-index: 2; }
+.trophy-btn svg { width: 100%; height: 100%; display: block; }
+.pick-empty { grid-column: 1 / -1; margin: 40px auto; max-width: 420px; text-align: center; color: #fff; font-size: 22px; font-weight: 700; text-shadow: 0 2px 0 rgba(0,0,0,.2); }
+.pick-empty .guide { display: block; margin: 0 auto 12px; }
+.pad.free svg { touch-action: none; cursor: crosshair; }
+.pad.free path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.pad.free .drawing { stroke: var(--pink); }
+.pad.free .ink { stroke: var(--ink); }
+.pad.free .wrong { stroke: var(--pink); opacity: 0; transition: opacity .4s; }
+.done-char { font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 72px; color: #fff; text-shadow: 0 3px 0 rgba(0,0,0,.2); }
+.done-trophy { width: 120px; height: 120px; padding: 10px; border-radius: 50%; background: #fff; box-shadow: 0 6px 0 rgba(0,0,0,.18); animation: pop .7s cubic-bezier(.2,1.6,.4,1) .3s backwards; }
+.done-trophy svg { width: 100%; height: 100%; display: block; }
+/* Her handwriting, opened from a trophy */
+.capture { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: rgba(11,79,122,.55); }
+.capture-card { position: relative; background: #fff; border-radius: 28px; padding: 22px; box-shadow: 0 8px 0 rgba(0,0,0,.2); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.capture-card .round { position: absolute; top: -14px; right: -14px; }
+.capture-art { width: min(72vw, 56vh, 420px); aspect-ratio: 1; border-radius: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='2' y='2' width='96' height='96' fill='none' stroke='%23f2a7c6' stroke-width='1.2'/%3E%3Cpath d='M50 2V98M2 50H98' stroke='%23f2a7c6' stroke-width='.8' stroke-dasharray='3 3'/%3E%3C/svg%3E");
+  background-size: 100% 100%; }
+.capture-art svg { width: 100%; height: 100%; display: block; }
+.capture-art path { fill: none; stroke: var(--ink); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+.capture-note { font-size: 18px; font-weight: 700; color: #5b6b7a; display: flex; align-items: center; gap: 10px; }
+.capture-note span { font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 30px; color: var(--ink); }
 
 @media (orientation: landscape) {
   .stage { flex-direction: row; }
@@ -340,39 +390,13 @@ button {
 .creatures-new { display: flex; justify-content: center; gap: 8px; }
 .done-new .creature { display: block; width: 120px; height: 120px; margin: 8px 0 0; animation: pop .7s cubic-bezier(.2,1.6,.4,1) .4s backwards; }
 .done-new .creature svg { width: 100%; height: 100%; }
-.new-stickers { display: inline-flex; align-items: center; gap: 10px; font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 40px; }
-.new-stickers svg { width: 34px; height: 34px; }
+.new-mastered { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 10px; font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 34px; }
+.new-mastered b { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: var(--card); color: var(--ink); font-weight: 400;
+  box-shadow: 0 0 0 4px var(--gold), 0 4px 0 rgba(0,0,0,.15); animation: pop .6s cubic-bezier(.2,1.6,.4,1) .3s backwards; }
 
-/* ---------- Sticker book ---------- */
-.stickers {
-  flex: 1; overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-  gap: 10px;
-  align-content: start;
-  padding-bottom: 20px;
-  position: relative; z-index: 5;
-}
-.sticker-group { grid-column: 1 / -1; margin: 10px 0 0; color: #fff; font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 22px; text-shadow: 0 2px 0 rgba(0,0,0,.2); }
-.sticker-group small { font-family: system-ui, sans-serif; font-size: 14px; font-weight: 700; opacity: .85; margin-left: 6px; }
-/* Sized by the sticker itself (cqw), like the word bubbles */
-.sticker {
-  position: relative;
-  aspect-ratio: 1;
-  padding: 0;
-  border-radius: 18px;
-  background: var(--card);
-  box-shadow: 0 4px 0 rgba(0,0,0,.15);
-  container-type: inline-size;
-}
-.sticker-pic { position: absolute; left: 17%; right: 17%; top: 4%; aspect-ratio: 1; }
-.sticker-pic svg { display: block; width: 100%; height: 100%; }
-.sticker-char { position: absolute; left: 0; right: 0; bottom: 4%; height: 24cqw; display: flex; align-items: center; justify-content: center;
-  font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 20cqw; line-height: 1; color: var(--ink); }
-.sticker.locked { background: rgba(255,255,255,.3); box-shadow: none; }
-.sticker.locked .sticker-pic { filter: grayscale(1); opacity: .35; }
-.sticker.locked .sticker-char { color: rgba(255,255,255,.75); }
-.sticker.bounce { animation: pop .5s cubic-bezier(.2,1.6,.4,1); }
+/* Group headings in the practice list */
+.group-head { grid-column: 1 / -1; margin: 10px 0 0; color: #fff; font-family: "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; font-size: 22px; text-shadow: 0 2px 0 rgba(0,0,0,.2); }
+.group-head small { font-family: system-ui, sans-serif; font-size: 14px; font-weight: 700; opacity: .85; margin-left: 6px; }
 
 /* ---------- Parent corner ---------- */
 .parent { background: #f7f4fb; }

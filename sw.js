@@ -1,7 +1,7 @@
 // Keeps the app working offline. Change VERSION whenever any file changes, so devices pick up the new files.
-const VERSION = "brush-bay-26";
+const VERSION = "brush-bay-30";
 const FILES = [
-  "./", "index.html", "style.css", "app.js", "words.js", "characters.js", "pictures.js", "music.js",
+  "./", "index.html", "style.css", "app.js", "words.js", "characters.js", "pictures.js", "freewrite.js", "music.js",
   "vendor/hanzi-writer.min.js", "manifest.webmanifest",
   "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png",
 ];
