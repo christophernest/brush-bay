@@ -43,8 +43,14 @@
   // Stars are earned once per character: its best turn counts (2 stars, then 3 later, adds just 1).
   const bestOf = (c) => (progress.chars[c] ? progress.chars[c].best : 0);
   const worldStars = (w) => w.chars.reduce((n, c) => n + bestOf(c), 0);
-  // Fish in a category's tank: one for each of its characters that has had a 3-star turn, won once.
-  const fishIn = (w) => w.chars.filter((c) => bestOf(c) === 3).length;
+  // Creatures in a category's tank: one for each of its characters that has had a 3-star turn. The big ones
+  // (stingray, orca, whale) would crowd the tank, so those come one for every 10% of the category's possible
+  // stars instead, up to 10: e.g. Animals (22 characters, 66 stars) wins its first orca at 7 stars.
+  const BIG_CREATURES = new Set(["stingray", "orca", "whale"]);
+  const MAX_BIG = 10;
+  const fishIn = (w) => BIG_CREATURES.has(w.creature)
+    ? Math.min(MAX_BIG, Math.floor((MAX_BIG * worldStars(w)) / (3 * w.chars.length)))
+    : w.chars.filter((c) => bestOf(c) === 3).length;
   const MAX_SWIMMERS = 40;  // more than this would crowd the screen
   const worldDone = (w) => masteredIn(w) === w.chars.length;
   // A category opens once the one before it has two thirds (67%) of its possible stars, e.g. 20 of 30.
@@ -257,7 +263,7 @@
     $("plants").innerHTML = sc.plants;
   }
 
-  // ---------- The fish tank: one creature for each character in this category with a 3-star turn ----------
+  // ---------- The fish tank: one creature per 3-star character, or per 10% of the stars for big ones (see fishIn) ----------
   let swimmers = [];
   const FACES_RIGHT = new Set(["seal", "seahorse"]);  // the rest are drawn facing left
   // Some creatures swim bigger than the fish: a killer whale much bigger, a ray a little (it's thin side to side),
@@ -537,6 +543,8 @@
     const cs = charState(item.char);
     cs.last = Date.now();
     const before = cs.best;
+    const home = WORLDS.find((w) => w.id === word.world);
+    const fishBefore = fishIn(home);
     cs.best = Math.max(cs.best, stars);
     session.gained += cs.best - before;  // only stars above her best so far are new
     if (!item.review) {
@@ -554,11 +562,11 @@
     fanfare();
     bubbles(10);
     $("stars").innerHTML = [1, 2, 3].map((n) => `<span class="${n <= stars ? "" : "dim"}">${STAR_SVG}</span>`).join("");
-    // The first 3-star turn on a character: a new creature for its category tank (one per character, ever).
-    if (stars === 3 && before < 3) {
-      const home = WORLDS.find((w) => w.id === word.world);
-      if (home === session.world) session.newFish++;
-      $("stars").insertAdjacentHTML("beforeend", `<span class="fish-won">${CREATURE_SVG(home.creature)}</span>`);
+    // A creature for the tank: a first 3-star turn, or (big creatures) new stars reaching the next 10% of the category's.
+    const won = fishIn(home) - fishBefore;
+    if (won > 0) {
+      if (home === session.world) session.newFish += won;
+      $("stars").insertAdjacentHTML("beforeend", `<span class="fish-won">${CREATURE_SVG(home.creature)}</span>`.repeat(won));
     }
     const my = token;
     setTimeout(() => { if (my === token) sayWord(word, "char"); }, 500);
@@ -583,7 +591,7 @@
     $("done-stars").innerHTML = STAR_SVG.repeat(s.gained);  // new stars only
     // The category's stars so far, so the screen is never empty after a turn with no new stars.
     $("done-total").innerHTML = `<i class="on">${STAR_SVG}</i><b>${worldStars(s.world)}</b> / ${3 * s.world.chars.length}`;
-    // Characters mastered (each in a gold ring, as on its word bubble), and the creatures won with 3-star turns.
+    // Characters mastered (each in a gold ring, as on its word bubble), and the creatures won this time.
     let html = s.mastered.length ? `<span class="new-mastered" lang="zh-CN">${s.mastered.map((c) => `<b>${c}</b>`).join("")}</span>` : "";
     if (s.newFish) {
       html += `<span class="creatures-new">${Array(s.newFish).fill(`<span class="creature">${CREATURE_SVG(s.world.creature)}</span>`).join("")}</span>`;
