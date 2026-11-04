@@ -863,7 +863,7 @@
     pickVoice();
     const haveClips = WORDS.filter((w) => clips.has(`${w.char.codePointAt(0).toString(16)}-say.mp3`)).length;
     $("voice-status").textContent = haveClips
-      ? `Recorded voice clips (${clipVoice}) for ${haveClips} of ${WORDS.length} characters.` +
+      ? `Voice clips (${clipVoice}) for ${haveClips} of ${WORDS.length} characters.` +
         (haveClips < WORDS.length ? " The rest use this device's own voice." : "")
       : !("speechSynthesis" in window)
       ? "This browser has no speech support, so the speaker button stays silent."

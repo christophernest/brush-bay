@@ -1,12 +1,12 @@
 // Keeps the app working offline. Change VERSION whenever any file changes, so devices pick up the new files.
-const VERSION = "brush-bay-32";
+const VERSION = "brush-bay-33";
 const FILES = [
   "./", "index.html", "style.css", "app.js", "words.js", "characters.js", "pictures.js", "freewrite.js", "music.js",
   "vendor/hanzi-writer.min.js", "manifest.webmanifest",
   "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png",
 ];
 
-// The voice clips are stored too, from the first visit and after every update, so the recorded voice works offline.
+// The voice clips are stored too, from the first visit and after every update, so the voice clips work offline.
 // "reload" skips the browser's own cache, so an update never stores an older copy of a file.
 self.addEventListener("install", (e) => {
   const fresh = (url) => new Request(url, { cache: "reload" });
