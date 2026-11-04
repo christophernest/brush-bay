@@ -848,7 +848,7 @@
     svg.addEventListener("pointercancel", end);
   }
 
-  // ---------- Parent corner (hold the gear for 3 seconds) ----------
+  // ---------- Parent corner (hold the parent button for 3 seconds) ----------
   function renderParent() {
     const mastered = WORDS.filter((w) => stageOf(w.char) >= MASTERED).length;
     const started = WORDS.filter((w) => stageOf(w.char) > 0 && stageOf(w.char) < MASTERED).length;

@@ -580,7 +580,9 @@
     pencil: line(`<path d="M4 20 L5 15 L16 4 L20 8 L9 19 Z"/><path d="M13.5 6.5 L17.5 10.5"/>`),
     next: line(`<path d="M4 12 H19 M13 6 L19 12 L13 18"/>`),
     book: line(`<path d="M12 6 Q8 3.5 3 4.5 V19 Q8 18 12 20 Q16 18 21 19 V4.5 Q16 3.5 12 6 Z"/><path d="M12 6 V20"/>`),
-    gear: line(`<circle cx="12" cy="12" r="3"/><path d="M12 2.5 V5 M12 19 V21.5 M2.5 12 H5 M19 12 H21.5 M5.3 5.3 L7 7 M17 17 L18.7 18.7 M5.3 18.7 L7 17 M17 7 L18.7 5.3"/>`),
+    // The parent corner: a grown-up with a small padlock (it's for grown-ups, behind a 3-second hold)
+    parent: line(`<circle cx="9.5" cy="6.8" r="3.6"/><path d="M2.8 21 V18.6 Q2.8 13.4 9.5 13.4 Q11.6 13.4 12.9 14"/>`,
+      `<rect x="13.6" y="15.6" width="8.6" height="6.6" rx="1.6" fill="currentColor" stroke="none"/><path d="M15.6 15.8 V14 Q15.6 11.4 17.9 11.4 Q20.2 11.4 20.2 14 V15.8" stroke-width="2"/>`),
     music: line(`<path d="M9 18 V5.5 L19 3.5 V16"/><ellipse cx="6.5" cy="18" rx="2.6" ry="2.1" fill="currentColor"/><ellipse cx="16.5" cy="16" rx="2.6" ry="2.1" fill="currentColor"/>`),
     musicOff: line(`<path d="M9 18 V5.5 L19 3.5 V16" opacity=".45"/><ellipse cx="6.5" cy="18" rx="2.6" ry="2.1" fill="currentColor" opacity=".45"/><ellipse cx="16.5" cy="16" rx="2.6" ry="2.1" fill="currentColor" opacity=".45"/><path d="M3.5 3.5 L20.5 20.5"/>`),
     close: line(`<path d="M6 6 L18 18 M18 6 L6 18"/>`),
